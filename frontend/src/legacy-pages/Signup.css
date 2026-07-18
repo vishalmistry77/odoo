@@ -42,7 +42,7 @@
 }
 
 .signup-body .register-container {
-    max-width: 900px;
+    max-width: 780px;
     margin: 0 auto;
     animation: slideUp 0.6s ease-out;
     position: relative;
@@ -67,6 +67,7 @@
     padding: 3rem;
     position: relative;
     overflow: hidden;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.24);
 }
 
 .signup-body .register-card::before {
@@ -120,7 +121,7 @@
 .signup-body .role-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 1.5rem;
+    gap: 1rem;
     max-width: 520px;
     margin: 0 auto;
 }
@@ -181,12 +182,13 @@
 .signup-body .form-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 1.5rem;
+    gap: 1.25rem;
     margin-bottom: 1.5rem;
 }
 
 .signup-body .form-group {
-    margin-bottom: 1.5rem;
+    min-width: 0;
+    margin-bottom: 0;
 }
 
 .signup-body .form-group.full-width {
@@ -209,6 +211,7 @@
     font-size: 1rem;
     font-family: 'Outfit', sans-serif;
     transition: all 0.3s;
+    box-sizing: border-box;
 }
 
 .signup-body input:focus, .signup-body select:focus {
@@ -337,5 +340,29 @@
 
     .signup-body .register-card {
         padding: 2rem 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .signup-body {
+        padding: 0.75rem;
+    }
+
+    .signup-body .register-card {
+        border-radius: 18px;
+        padding: 1.5rem 1rem;
+    }
+
+    .signup-body h1 {
+        font-size: 1.65rem;
+    }
+
+    .signup-body .role-card {
+        padding: 1.15rem;
+    }
+
+    .signup-body .checkbox-group {
+        gap: 0.55rem;
+        margin-bottom: 1.25rem;
     }
 }
