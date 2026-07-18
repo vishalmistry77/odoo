@@ -1,6 +1,42 @@
 const { PrismaClient } = require('@prisma/client');
 const sendEmail = require('../utils/sendEmail');
+const crypto = require('crypto');
+const https = require('https');
+const cartService = require('../services/cartService');
 const prisma = new PrismaClient();
+
+const hasRazorpayTestConfig = () => {
+    const keyId = process.env.RAZORPAY_KEY_ID || '';
+    const keySecret = process.env.RAZORPAY_KEY_SECRET || '';
+    return keyId.startsWith('rzp_test_') && keySecret && !keyId.includes('replace') && !keySecret.includes('replace');
+};
+
+const razorpayRequest = (path, method = 'GET', body) => new Promise((resolve, reject) => {
+    const keyId = process.env.RAZORPAY_KEY_ID;
+    const keySecret = process.env.RAZORPAY_KEY_SECRET;
+    if (!hasRazorpayTestConfig()) return reject(new Error('Razorpay Test Mode keys are not configured correctly.'));
+
+    const payload = body ? JSON.stringify(body) : undefined;
+    const request = https.request({
+        hostname: 'api.razorpay.com', path, method,
+        headers: {
+            Authorization: `Basic ${Buffer.from(`${keyId}:${keySecret}`).toString('base64')}`,
+            ...(payload ? { 'Content-Type': 'application/json', 'Content-Length': Buffer.byteLength(payload) } : {})
+        }
+    }, (response) => {
+        let data = '';
+        response.on('data', (chunk) => { data += chunk; });
+        response.on('end', () => {
+            let parsed;
+            try { parsed = JSON.parse(data); } catch { return reject(new Error('Invalid response from Razorpay.')); }
+            if (response.statusCode >= 200 && response.statusCode < 300) return resolve(parsed);
+            reject(new Error(parsed.error?.description || 'Razorpay request failed.'));
+        });
+    });
+    request.on('error', reject);
+    if (payload) request.write(payload);
+    request.end();
+});
 
 const formatInvoiceEmail = ({ order, invoice }) => {
     const amount = Number(invoice.amount).toLocaleString('en-IN', {
@@ -399,6 +435,158 @@ const payOrder = async (req, res) => {
     }
 };
 
+const createRazorpayOrder = async (req, res) => {
+    try {
+        const order = await prisma.order.findUnique({
+            where: { id: req.params.id },
+            include: { invoice: true }
+        });
+        if (!order) return res.status(404).json({ success: false, message: 'Order not found' });
+        if (order.userId !== req.user.userId && req.user.role !== 'ADMIN') return res.status(403).json({ success: false, message: 'Not authorized to pay this order' });
+        if (!order.invoice || order.invoice.status === 'PAID') return res.status(400).json({ success: false, message: 'A payable unpaid invoice is required.' });
+        if (order.status !== 'SALES_ORDER' && order.status !== 'CONFIRMED') return res.status(400).json({ success: false, message: 'Only confirmed orders can be paid.' });
+
+        const razorpayOrder = await razorpayRequest('/v1/orders', 'POST', {
+            amount: Math.round(Number(order.invoice.amount) * 100),
+            currency: 'INR',
+            receipt: order.orderNumber.slice(0, 40),
+            notes: { rentflowOrderId: order.id }
+        });
+        res.json({ success: true, key: process.env.RAZORPAY_KEY_ID, order: razorpayOrder });
+    } catch (error) {
+        console.error('Razorpay order creation error:', error.message);
+        res.status(500).json({ success: false, message: error.message || 'Could not start Razorpay payment.' });
+    }
+};
+
+// Direct customer checkout: reserve the cart as an unpaid order, then open Razorpay.
+// The order is marked paid only after the signature is verified in verifyRazorpayPayment.
+const createCheckoutRazorpayOrder = async (req, res) => {
+    try {
+        if (!hasRazorpayTestConfig()) {
+            return res.status(400).json({ success: false, message: 'Razorpay Test Mode keys are not configured correctly.' });
+        }
+
+        const cart = await cartService.getOrCreateCart(req.user.userId);
+        if (!cart.items.length) return res.status(400).json({ success: false, message: 'Your cart is empty.' });
+
+        const orderNumber = `SO${Date.now().toString().slice(-6)}`;
+        const order = await prisma.$transaction(async (tx) => {
+            const createdOrder = await tx.order.create({
+                data: {
+                    userId: req.user.userId,
+                    orderNumber,
+                    totalAmount: cart.total,
+                    untaxedAmount: cart.total,
+                    discountAmount: cart.discountAmount || 0,
+                    status: 'SALES_ORDER',
+                    lockedTotalAmount: cart.total,
+                    priceLockedAt: new Date(),
+                    renterAcceptedAt: new Date(),
+                    items: {
+                        create: cart.items.map((item) => ({
+                            productId: item.productId,
+                            quantity: item.quantity,
+                            price: item.product.price,
+                            startDate: item.startDate ? new Date(item.startDate) : null,
+                            endDate: item.endDate ? new Date(item.endDate) : null
+                        }))
+                    }
+                }
+            });
+            await tx.invoice.create({
+                data: { orderId: createdOrder.id, amount: cart.total, status: 'UNPAID', method: 'RAZORPAY_TEST' }
+            });
+            await tx.cart.delete({ where: { userId: req.user.userId } });
+            return createdOrder;
+        });
+
+        const razorpayOrder = await razorpayRequest('/v1/orders', 'POST', {
+            amount: Math.round(Number(cart.total) * 100),
+            currency: 'INR',
+            receipt: order.orderNumber.slice(0, 40),
+            notes: { rentflowOrderId: order.id }
+        });
+        res.status(201).json({ success: true, key: process.env.RAZORPAY_KEY_ID, order: razorpayOrder, orderId: order.id });
+    } catch (error) {
+        console.error('Direct Razorpay checkout error:', error.message);
+        res.status(500).json({ success: false, message: error.message || 'Could not start checkout.' });
+    }
+};
+
+const createCodCheckoutOrder = async (req, res) => {
+    try {
+        const cart = await cartService.getOrCreateCart(req.user.userId);
+        if (!cart.items.length) return res.status(400).json({ success: false, message: 'Your cart is empty.' });
+
+        const orderNumber = `SO${Date.now().toString().slice(-6)}`;
+        const order = await prisma.$transaction(async (tx) => {
+            const createdOrder = await tx.order.create({
+                data: {
+                    userId: req.user.userId,
+                    orderNumber,
+                    totalAmount: cart.total,
+                    untaxedAmount: cart.total,
+                    discountAmount: cart.discountAmount || 0,
+                    status: 'SALES_ORDER',
+                    lockedTotalAmount: cart.total,
+                    priceLockedAt: new Date(),
+                    renterAcceptedAt: new Date(),
+                    items: {
+                        create: cart.items.map((item) => ({
+                            productId: item.productId,
+                            quantity: item.quantity,
+                            price: item.product.price,
+                            startDate: item.startDate ? new Date(item.startDate) : null,
+                            endDate: item.endDate ? new Date(item.endDate) : null
+                        }))
+                    }
+                },
+                include: { invoice: true }
+            });
+            await tx.invoice.create({
+                data: { orderId: createdOrder.id, amount: cart.total, status: 'UNPAID', method: 'COD' }
+            });
+            await tx.cart.delete({ where: { userId: req.user.userId } });
+            return createdOrder;
+        });
+
+        res.status(201).json({
+            success: true,
+            message: 'COD order placed successfully.',
+            orderId: order.id,
+            data: order
+        });
+    } catch (error) {
+        console.error('COD checkout error:', error.message);
+        res.status(500).json({ success: false, message: error.message || 'Could not place COD order.' });
+    }
+};
+
+const verifyRazorpayPayment = async (req, res) => {
+    try {
+        const { razorpay_payment_id, razorpay_order_id, razorpay_signature } = req.body;
+        if (!razorpay_payment_id || !razorpay_order_id || !razorpay_signature) return res.status(400).json({ success: false, message: 'Incomplete Razorpay payment response.' });
+        const expectedSignature = crypto.createHmac('sha256', process.env.RAZORPAY_KEY_SECRET || '')
+            .update(`${razorpay_order_id}|${razorpay_payment_id}`).digest('hex');
+        if (!crypto.timingSafeEqual(Buffer.from(expectedSignature), Buffer.from(razorpay_signature))) return res.status(400).json({ success: false, message: 'Razorpay payment verification failed.' });
+
+        const [order, razorpayOrder] = await Promise.all([
+            prisma.order.findUnique({ where: { id: req.params.id }, include: { invoice: true } }),
+            razorpayRequest(`/v1/orders/${razorpay_order_id}`)
+        ]);
+        if (!order) return res.status(404).json({ success: false, message: 'Order not found' });
+        if (order.userId !== req.user.userId && req.user.role !== 'ADMIN') return res.status(403).json({ success: false, message: 'Not authorized to pay this order' });
+        if (!order.invoice || razorpayOrder.notes?.rentflowOrderId !== order.id || razorpayOrder.amount !== Math.round(Number(order.invoice.amount) * 100)) return res.status(400).json({ success: false, message: 'Payment does not match this invoice.' });
+
+        req.body.method = 'RAZORPAY_TEST';
+        return payOrder(req, res);
+    } catch (error) {
+        console.error('Razorpay verification error:', error.message);
+        return res.status(500).json({ success: false, message: error.message || 'Could not verify Razorpay payment.' });
+    }
+};
+
 const pickupOrder = async (req, res) => {
     try {
         const { id } = req.params;
@@ -498,4 +686,4 @@ const returnOrder = async (req, res) => {
     }
 };
 
-module.exports = { createOrder, getOrder, getOrders, exportOrders, sendOrder, confirmOrder, payOrder, pickupOrder, returnOrder };
+module.exports = { createOrder, getOrder, getOrders, exportOrders, sendOrder, confirmOrder, payOrder, createRazorpayOrder, createCheckoutRazorpayOrder, createCodCheckoutOrder, verifyRazorpayPayment, pickupOrder, returnOrder };

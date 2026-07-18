@@ -140,7 +140,7 @@ const Login = () => {
                                 <input id="rf-email" type="email" name="email" placeholder="you@example.com"
                                     value={formData.email} onChange={handleChange} required
                                     style={S.input}
-                                    onFocus={e => e.target.style.borderColor = '#f97316'}
+                                    onFocus={e => e.target.style.borderColor = '#d94841'}
                                     onBlur={e => e.target.style.borderColor = '#e5e7eb'} />
                             </div>
                         </div>
@@ -156,7 +156,7 @@ const Login = () => {
                                     placeholder="Enter your password" value={formData.password}
                                     onChange={handleChange} required
                                     style={{ ...S.input, paddingRight: '3rem' }}
-                                    onFocus={e => e.target.style.borderColor = '#f97316'}
+                                    onFocus={e => e.target.style.borderColor = '#d94841'}
                                     onBlur={e => e.target.style.borderColor = '#e5e7eb'} />
                                 <button type="button" style={S.eyeBtn} onClick={() => setShowPassword(s => !s)}>
                                     <EyeIcon open={showPassword} />
@@ -184,30 +184,6 @@ const Login = () => {
                         </button>
                     </form>
 
-                    {/* Divider */}
-                    <div style={S.divider}>
-                        <div style={S.dividerLine} /><span style={S.dividerText}>quick access</span><div style={S.dividerLine} />
-                    </div>
-
-                    {/* Quick login buttons */}
-                    <div style={S.quickAccess}>
-                        <div style={S.quickGrid}>
-                            {[
-                                { role: 'Admin', email: 'aryansondharva25@gmail.com', pw: 'admin123', color: '#7c3aed' },
-                                { role: 'Vendor', email: 'vendor1@rentflow.com', pw: 'vendor123', color: '#0ea5e9' },
-                                { role: 'Customer', email: 'customer@rentflow.com', pw: 'customer123', color: '#10b981' },
-                            ].map(({ role, email, pw, color }) => (
-                                <button key={role} type="button"
-                                    style={{ ...S.quickBtn, borderColor: color, color }}
-                                    onClick={() => setFormData(p => ({ ...p, email, password: pw }))}
-                                    onMouseEnter={e => { e.currentTarget.style.background = color; e.currentTarget.style.color = '#fff'; }}
-                                    onMouseLeave={e => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = color; }}>
-                                    {role}
-                                </button>
-                            ))}
-                        </div>
-                    </div>
-
                     <p style={S.signupText}>
                         Don't have an account?{' '}
                         <Link to="/signup" style={S.signupLink}>Create account</Link>
@@ -222,70 +198,71 @@ const styles = {
     page: { display: 'flex', minHeight: '100vh', fontFamily: "'Inter', 'Outfit', system-ui, sans-serif" },
     leftPanel: {
         flex: '0 0 48%', position: 'relative', overflow: 'hidden',
-        background: 'linear-gradient(135deg, #1e1b4b 0%, #312e81 30%, #4c1d95 60%, #1e3a5f 100%)',
+        background: 'linear-gradient(145deg, #fffdf8 0%, #fff8e7 55%, #f4fbf6 100%)',
+        borderRight: '1px solid #eee7dc',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
     },
     leftContent: { position: 'relative', zIndex: 2, padding: '3rem', maxWidth: '460px', width: '100%' },
     logoRow: { display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '3rem' },
     logoIcon: {
         width: '44px', height: '44px', borderRadius: '12px',
-        background: 'linear-gradient(135deg, #f97316, #fb923c)',
+        background: '#d94841',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        boxShadow: '0 4px 20px rgba(249,115,22,0.4)',
+        boxShadow: '0 8px 20px rgba(217,72,65,0.22)',
     },
-    logoText: { fontSize: '1.5rem', fontWeight: '700', color: '#fff', letterSpacing: '-0.02em' },
+    logoText: { fontSize: '1.5rem', fontWeight: '800', color: '#17233d', letterSpacing: '-0.02em' },
     leftHeadline: { marginBottom: '2.5rem' },
-    headline: { fontSize: '2.4rem', fontWeight: '800', color: '#fff', lineHeight: '1.15', margin: '0 0 1rem', letterSpacing: '-0.03em' },
-    headlineAccent: { color: '#fb923c' },
-    headlineSubtitle: { fontSize: '1.05rem', color: 'rgba(255,255,255,0.65)', lineHeight: '1.6', margin: 0 },
+    headline: { fontSize: '2.4rem', fontWeight: '800', color: '#17233d', lineHeight: '1.15', margin: '0 0 1rem', letterSpacing: '-0.03em' },
+    headlineAccent: { color: '#d94841', textDecoration: 'underline', textDecorationColor: '#f7d857', textUnderlineOffset: '7px' },
+    headlineSubtitle: { fontSize: '1.05rem', color: '#52617a', lineHeight: '1.6', margin: 0 },
     featureList: { display: 'flex', flexDirection: 'column', gap: '0.85rem', marginBottom: '2.5rem' },
     featureItem: { display: 'flex', alignItems: 'center', gap: '0.75rem' },
-    featureIcon: { color: '#34d399', flexShrink: 0, display: 'flex' },
-    featureText: { color: 'rgba(255,255,255,0.85)', fontSize: '0.95rem', fontWeight: '500' },
+    featureIcon: { color: '#4dbd8b', flexShrink: 0, display: 'flex' },
+    featureText: { color: '#35445e', fontSize: '0.95rem', fontWeight: '600' },
     statsRow: {
         display: 'flex', gap: '1rem', padding: '1.25rem 1.5rem',
-        background: 'rgba(255,255,255,0.08)', borderRadius: '16px',
-        border: '1px solid rgba(255,255,255,0.12)',
+        background: 'rgba(255,255,255,0.76)', borderRadius: '16px',
+        border: '1px solid #eee7dc', boxShadow: '0 12px 28px rgba(30,42,66,0.06)',
     },
     statItem: { flex: 1, textAlign: 'center' },
-    statVal: { fontSize: '1.35rem', fontWeight: '800', color: '#fff' },
-    statLab: { fontSize: '0.78rem', color: 'rgba(255,255,255,0.55)', marginTop: '0.25rem', fontWeight: '500' },
-    deco1: { position: 'absolute', top: '-120px', right: '-120px', width: '400px', height: '400px', borderRadius: '50%', background: 'rgba(249,115,22,0.12)', zIndex: 1 },
-    deco2: { position: 'absolute', bottom: '-80px', left: '-80px', width: '300px', height: '300px', borderRadius: '50%', background: 'rgba(139,92,246,0.15)', zIndex: 1 },
-    deco3: { position: 'absolute', top: '40%', right: '5%', width: '150px', height: '150px', borderRadius: '50%', background: 'rgba(16,185,129,0.08)', zIndex: 1 },
-    rightPanel: { flex: 1, background: '#f9fafb', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' },
+    statVal: { fontSize: '1.35rem', fontWeight: '800', color: '#17233d' },
+    statLab: { fontSize: '0.78rem', color: '#71809a', marginTop: '0.25rem', fontWeight: '600' },
+    deco1: { position: 'absolute', top: '-120px', right: '-120px', width: '400px', height: '400px', borderRadius: '50%', background: 'rgba(247,216,87,0.44)', zIndex: 1 },
+    deco2: { position: 'absolute', bottom: '-80px', left: '-80px', width: '300px', height: '300px', borderRadius: '50%', background: 'rgba(117,205,158,0.30)', zIndex: 1 },
+    deco3: { position: 'absolute', top: '40%', right: '5%', width: '150px', height: '150px', borderRadius: '50%', background: 'rgba(113,148,240,0.17)', zIndex: 1 },
+    rightPanel: { flex: 1, background: '#ffffff', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '2rem' },
     formCard: {
         width: '100%', maxWidth: '440px', background: '#fff',
         borderRadius: '24px', padding: '2.5rem',
-        boxShadow: '0 4px 32px rgba(0,0,0,0.07)', border: '1px solid #f0f0f0',
+        boxShadow: '0 18px 45px rgba(23,35,61,0.09)', border: '1px solid #eee7dc',
     },
     formHeader: { marginBottom: '1.75rem' },
-    formTitle: { fontSize: '1.75rem', fontWeight: '800', color: '#111827', margin: '0 0 0.5rem', letterSpacing: '-0.02em' },
-    formSubtitle: { fontSize: '0.95rem', color: '#6b7280', margin: 0 },
+    formTitle: { fontSize: '1.75rem', fontWeight: '800', color: '#17233d', margin: '0 0 0.5rem', letterSpacing: '-0.02em' },
+    formSubtitle: { fontSize: '0.95rem', color: '#66738a', margin: 0 },
     successBanner: { display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#f0fdf4', border: '1px solid #bbf7d0', color: '#16a34a', padding: '0.75rem 1rem', borderRadius: '10px', fontSize: '0.875rem', marginBottom: '1rem' },
     errorBanner: { display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#fef2f2', border: '1px solid #fecaca', color: '#dc2626', padding: '0.75rem 1rem', borderRadius: '10px', fontSize: '0.875rem', marginBottom: '1rem' },
     form: { display: 'flex', flexDirection: 'column', gap: '1.25rem' },
     fieldGroup: { display: 'flex', flexDirection: 'column', gap: '0.5rem' },
-    label: { fontSize: '0.875rem', fontWeight: '600', color: '#374151' },
+    label: { fontSize: '0.875rem', fontWeight: '700', color: '#283752' },
     inputWrapper: { position: 'relative' },
     inputIcon: { position: 'absolute', left: '0.9rem', top: '50%', transform: 'translateY(-50%)', display: 'flex', pointerEvents: 'none' },
     input: {
         width: '100%', paddingLeft: '2.75rem', paddingRight: '1rem',
         paddingTop: '0.8rem', paddingBottom: '0.8rem',
-        border: '1.5px solid #e5e7eb', borderRadius: '12px',
-        fontSize: '0.95rem', color: '#111827', background: '#fafafa',
+        border: '1.5px solid #e9e3d8', borderRadius: '12px',
+        fontSize: '0.95rem', color: '#17233d', background: '#fffdf9',
         outline: 'none', transition: 'border-color 0.2s', boxSizing: 'border-box',
     },
     eyeBtn: { position: 'absolute', right: '0.9rem', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af', padding: '0.25rem', display: 'flex', borderRadius: '6px' },
     optionsRow: { display: 'flex', alignItems: 'center', justifyContent: 'space-between' },
     checkboxLabel: { display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.875rem', color: '#6b7280', cursor: 'pointer' },
-    checkbox: { accentColor: '#f97316', width: '16px', height: '16px' },
-    forgotLink: { fontSize: '0.875rem', color: '#f97316', textDecoration: 'none', fontWeight: '600' },
+    checkbox: { accentColor: '#d94841', width: '16px', height: '16px' },
+    forgotLink: { fontSize: '0.875rem', color: '#c93d37', textDecoration: 'none', fontWeight: '700' },
     submitBtn: {
         width: '100%', padding: '0.9rem', borderRadius: '12px', border: 'none',
-        background: 'linear-gradient(135deg, #f97316, #fb923c)',
+        background: '#d94841',
         color: '#fff', fontSize: '1rem', fontWeight: '700', cursor: 'pointer',
-        boxShadow: '0 4px 16px rgba(249,115,22,0.35)', letterSpacing: '0.01em',
+        boxShadow: '0 7px 16px rgba(217,72,65,0.28)', letterSpacing: '0.01em',
         transition: 'opacity 0.2s',
     },
     loadingInner: { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.6rem' },
@@ -297,7 +274,7 @@ const styles = {
     quickGrid: { display: 'flex', gap: '0.6rem' },
     quickBtn: { flex: 1, padding: '0.55rem 0.5rem', borderRadius: '10px', border: '1.5px solid', background: 'transparent', fontSize: '0.8rem', fontWeight: '700', cursor: 'pointer', transition: 'all 0.18s' },
     signupText: { textAlign: 'center', fontSize: '0.875rem', color: '#6b7280', marginTop: '1rem', marginBottom: 0 },
-    signupLink: { color: '#f97316', fontWeight: '700', textDecoration: 'none' },
+    signupLink: { color: '#c93d37', fontWeight: '700', textDecoration: 'none' },
 };
 
 export default Login;

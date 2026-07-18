@@ -123,6 +123,66 @@
     font-size: 0.85rem;
 }
 
+.payment-page .payment-method-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.payment-page .payment-method-card {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    width: 100%;
+    min-height: 92px;
+    padding: 1rem;
+    background: var(--surface-light);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    color: var(--text);
+    text-align: left;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s;
+}
+
+.payment-page .payment-method-card:hover {
+    border-color: rgba(220, 38, 38, 0.6);
+}
+
+.payment-page .payment-method-card.active {
+    background: rgba(220, 38, 38, 0.12);
+    border-color: var(--accent);
+}
+
+.payment-page .payment-method-card strong,
+.payment-page .payment-method-card small {
+    display: block;
+}
+
+.payment-page .payment-method-card strong {
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+}
+
+.payment-page .payment-method-card small {
+    color: var(--text-muted);
+    line-height: 1.35;
+}
+
+.payment-page .payment-method-dot {
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    border: 2px solid var(--text-muted);
+    border-radius: 50%;
+    box-shadow: inset 0 0 0 4px var(--surface-light);
+}
+
+.payment-page .payment-method-card.active .payment-method-dot {
+    background: var(--accent);
+    border-color: var(--accent);
+}
+
 /* Address Card */
 .payment-page .address-card {
     background: var(--surface-light);
@@ -311,4 +371,12 @@
 
 .payment-page .btn-pay-now:hover {
     background: #357abd;
+}
+
+@media (max-width: 640px) {
+    .payment-page .payment-method-grid,
+    .payment-page .form-row-2,
+    .payment-page .form-row-3 {
+        grid-template-columns: 1fr;
+    }
 }

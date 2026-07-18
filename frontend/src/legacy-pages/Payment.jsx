@@ -13,7 +13,7 @@ const Payment = () => {
     const { cartItems, getCartTotal, getCartCount, clearCart, rentalPeriod } = useCart();
     const { wishlist } = useWishlist();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-    const [saveDetails, setSaveDetails] = useState(false);
+    const [paymentMethod, setPaymentMethod] = useState('RAZORPAY');
     const [order, setOrder] = useState(null);
     const [loading, setLoading] = useState(false);
 
@@ -63,34 +63,80 @@ const Payment = () => {
 
         try {
             if (orderId) {
-                // Paying for existing order
-                const response = await api.post(`/orders/${orderId}/pay`);
-
-                if (response.data.success) {
-                    alert(response.data.message || 'Payment successful! Your invoice receipt has been emailed.');
-                    navigate(`/customer/orders/${orderId}`);
-                } else {
-                    alert('Payment failed: ' + response.data.message);
+                setLoading(true);
+                const checkoutScript = document.querySelector('script[src="https://checkout.razorpay.com/v1/checkout.js"]');
+                if (!window.Razorpay && !checkoutScript) {
+                    await new Promise((resolve, reject) => {
+                        const script = document.createElement('script');
+                        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+                        script.onload = resolve;
+                        script.onerror = () => reject(new Error('Could not load Razorpay Checkout.'));
+                        document.body.appendChild(script);
+                    });
                 }
-            } else {
-                // Create Order from Cart
-                const response = await api.post('/orders', {
-                    items: cartItems,
-                    total: getCartTotal()
+                const response = await api.post(`/orders/${orderId}/razorpay-order`);
+                const { key, order: razorpayOrder } = response.data;
+                const razorpay = new window.Razorpay({
+                    key, amount: razorpayOrder.amount, currency: razorpayOrder.currency, order_id: razorpayOrder.id,
+                    name: 'RentFlow', description: `Invoice ${order?.orderNumber || ''}`,
+                    prefill: { name: user?.name || '', email: user?.email || '' }, theme: { color: '#ff6b35' },
+                    handler: async (payment) => {
+                        try {
+                            const verification = await api.post(`/orders/${orderId}/razorpay-verify`, payment);
+                            alert(verification.data.message || 'Payment successful! Your invoice receipt has been emailed.');
+                            navigate(`/customer/orders/${orderId}`);
+                        } catch (error) {
+                            alert(error.response?.data?.message || 'Payment verification failed.');
+                        } finally { setLoading(false); }
+                    },
+                    modal: { ondismiss: () => setLoading(false) }
                 });
-
-                if (response.data.success) {
-                    setTimeout(() => {
-                        clearCart();
-                        navigate('/order-success', { state: { order: response.data.data } });
-                    }, 1500);
-                } else {
-                    alert('Order creation failed: ' + response.data.message);
+                razorpay.open();
+            } else {
+                setLoading(true);
+                if (paymentMethod === 'COD') {
+                    const response = await api.post('/orders/cod-checkout');
+                    const checkoutOrderId = response.data.orderId || response.data.data?.id;
+                    clearCart();
+                    alert(response.data.message || 'COD order placed successfully.');
+                    navigate(`/customer/orders/${checkoutOrderId}`);
+                    return;
                 }
+
+                // Express Checkout: create a secure server-side checkout order from the cart.
+                if (!window.Razorpay) {
+                    await new Promise((resolve, reject) => {
+                        const script = document.createElement('script');
+                        script.src = 'https://checkout.razorpay.com/v1/checkout.js';
+                        script.onload = resolve;
+                        script.onerror = () => reject(new Error('Could not load Razorpay Checkout.'));
+                        document.body.appendChild(script);
+                    });
+                }
+                const response = await api.post('/orders/razorpay-checkout');
+                const { key, order: razorpayOrder, orderId: checkoutOrderId } = response.data;
+                const razorpay = new window.Razorpay({
+                    key, amount: razorpayOrder.amount, currency: razorpayOrder.currency, order_id: razorpayOrder.id,
+                    name: 'RentFlow', description: 'Express Checkout',
+                    prefill: { name: user?.name || '', email: user?.email || '' }, theme: { color: '#ff6b35' },
+                    handler: async (payment) => {
+                        try {
+                            const verification = await api.post(`/orders/${checkoutOrderId}/razorpay-verify`, payment);
+                            clearCart();
+                            alert(verification.data.message || 'Payment successful!');
+                            navigate(`/customer/orders/${checkoutOrderId}`);
+                        } catch (error) {
+                            alert(error.response?.data?.message || 'Payment verification failed.');
+                        } finally { setLoading(false); }
+                    },
+                    modal: { ondismiss: () => setLoading(false) }
+                });
+                razorpay.open();
             }
         } catch (error) {
             console.error('Payment Error:', error);
-            alert('Payment failed. Please try again.');
+            alert(error.response?.data?.message || 'Payment failed. Please try again.');
+            setLoading(false);
         }
     };
 
@@ -150,15 +196,36 @@ const Payment = () => {
                 <div className="payment-section">
                     <h2>Express Checkout</h2>
 
-                    <form onSubmit={handlePayment} className="checkout-form">
-                        <div className="form-group">
-                            <h3>Card Details</h3>
-                            <input type="text" className="form-input" placeholder="xxxx xxxx xxxx xxxx" required />
-                            <div className="checkbox-group" onClick={() => setSaveDetails(!saveDetails)}>
-                                <div className={`checkbox ${saveDetails ? 'checked' : ''}`}></div>
-                                <label>Save my payment details</label>
+                    <form onSubmit={handlePayment} className="checkout-form" noValidate>
+                        {!orderId && (
+                            <div className="form-group">
+                                <h3>Payment Method</h3>
+                                <div className="payment-method-grid">
+                                    <button
+                                        type="button"
+                                        className={`payment-method-card ${paymentMethod === 'RAZORPAY' ? 'active' : ''}`}
+                                        onClick={() => setPaymentMethod('RAZORPAY')}
+                                    >
+                                        <span className="payment-method-dot"></span>
+                                        <span>
+                                            <strong>Pay Now</strong>
+                                            <small>Open Razorpay after Proceed</small>
+                                        </span>
+                                    </button>
+                                    <button
+                                        type="button"
+                                        className={`payment-method-card ${paymentMethod === 'COD' ? 'active' : ''}`}
+                                        onClick={() => setPaymentMethod('COD')}
+                                    >
+                                        <span className="payment-method-dot"></span>
+                                        <span>
+                                            <strong>COD</strong>
+                                            <small>Place order and pay on delivery</small>
+                                        </span>
+                                    </button>
+                                </div>
                             </div>
-                        </div>
+                        )}
 
                         <div className="form-group">
                             <h3>Personal Details</h3>
@@ -202,8 +269,8 @@ const Payment = () => {
                             </div>
                         </div>
 
-                        <button type="submit" className="btn btn-pay-now" style={{ width: '100%', marginTop: '1rem' }}>
-                            {orderId ? `Pay Invoice (Rs ${Number(order?.totalAmount || 0).toFixed(2)})` : `Request Quotation (R${getCartTotal().toFixed(2)})`}
+                        <button type="submit" disabled={loading} className="btn btn-pay-now" style={{ width: '100%', marginTop: '1rem' }}>
+                            {loading ? 'Processing...' : orderId ? `Pay Invoice (Rs ${Number(order?.invoice?.amount || order?.totalAmount || 0).toFixed(2)})` : paymentMethod === 'COD' ? `Proceed with COD (Rs ${getCartTotal().toFixed(2)})` : `Proceed to Pay (Rs ${getCartTotal().toFixed(2)})`}
                         </button>
                     </form>
                 </div>

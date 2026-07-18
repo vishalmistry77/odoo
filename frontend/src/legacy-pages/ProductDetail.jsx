@@ -146,7 +146,7 @@ const ProductDetail = () => {
         );
     }
 
-    const priceLabel = `R${product.price} / per ${DURATION_LABELS[product.durationType] || product.durationType?.toLowerCase()}`;
+    const priceLabel = `R${product.price} / ${DURATION_LABELS[product.durationType] || product.durationType?.toLowerCase()}`;
 
     return (
         <div className="product-detail-page">

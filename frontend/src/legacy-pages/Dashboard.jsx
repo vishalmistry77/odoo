@@ -233,7 +233,7 @@ const Dashboard = () => {
                                     <div className="product-info">
                                         <div className="product-name">{product.name}</div>
                                         <div className="product-price">
-                                            <span className="price-label">R{product.price} / per {DURATION_LABELS[product.durationType] || product.durationType?.toLowerCase()}</span>
+                                            <span className="price-label">R{product.price} / {DURATION_LABELS[product.durationType] || product.durationType?.toLowerCase()}</span>
                                         </div>
                                         <div className="product-actions">
                                             {product.stock > 0 ? (
