@@ -1,0 +1,214 @@
+/* VendorReports.css */
+.vendor-reports-page {
+    --primary: #0a0e27;
+    --accent: #00d9ff;
+    --accent-warm: #ff6b35;
+    --surface: #1a1f3a;
+    --surface-light: #252b4a;
+    --text: #e8eaf0;
+    --text-muted: #9ca3af;
+    --border: rgba(255, 255, 255, 0.1);
+}
+
+.vendor-reports-page {
+    font-family: 'Outfit', sans-serif;
+    background: var(--primary);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+/* Top Nav (Copied for consistency, normally would come from a shared CSS) */
+.top-nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+}
+
+.logo h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent-warm));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+}
+
+.nav-tabs {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.nav-tab {
+    padding: 0.75rem 1.25rem;
+    color: var(--text-muted);
+    border: none;
+    background: none;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.nav-tab:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+}
+
+.nav-tab.active {
+    background: rgba(0, 217, 255, 0.1);
+    color: var(--accent);
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 1rem;
+    background: var(--surface-light);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    background: var(--accent);
+    color: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+/* Reports Specific Styles */
+.vendor-main-content {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+.vendor-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2.5rem;
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.vendor-header-subtitle {
+    color: var(--text-muted);
+}
+
+.btn-secondary {
+    padding: 0.8rem 1.5rem;
+    background: transparent;
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.btn-secondary:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.reports-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+    gap: 2rem;
+}
+
+.report-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 2rem;
+}
+
+.report-card h3 {
+    margin-top: 0;
+    margin-bottom: 1.5rem;
+    font-size: 1.25rem;
+}
+
+.chart-placeholder {
+    height: 200px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 10px;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.bar {
+    flex: 1;
+    background: linear-gradient(to top, var(--accent), var(--surface-light));
+    border-radius: 4px 4px 0 0;
+    opacity: 0.7;
+    transition: height 0.5s ease;
+}
+
+.chart-note {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 1rem;
+}
+
+.top-products-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.top-products-list li {
+    display: flex;
+    justify-content: space-between;
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border);
+}
+
+.top-products-list li:last-child {
+    border-bottom: none;
+}
+
+.highlight {
+    color: var(--accent);
+    font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+}

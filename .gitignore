@@ -1,0 +1,10 @@
+# dependencies
+node_modules/
+frontend/node_modules/
+frontend/.next/
+
+# vite cache
+frontend/node_modules/.vite/
+.env
+backend/.env
+*.backup

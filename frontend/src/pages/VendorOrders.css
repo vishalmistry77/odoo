@@ -1,0 +1,536 @@
+.vendor-orders-page {
+    --primary: #0a0e27;
+    --accent: #00d9ff;
+    --accent-warm: #ff6b35;
+    --surface: #1a1f3a;
+    --surface-light: #252b4a;
+    --text: #e8eaf0;
+    --text-muted: #9ca3af;
+    --border: rgba(255, 255, 255, 0.1);
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --purple: #8b5cf6;
+    --pink: #ec4899;
+
+    font-family: 'Outfit', sans-serif;
+    background: var(--primary);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+}
+
+/* Top Navigation */
+/* Top Navigation - Aligned with Dashboard */
+.vendor-orders-page .top-nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.vendor-orders-page .nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}
+
+.vendor-orders-page .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+}
+
+.vendor-orders-page .logo h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent-warm));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+}
+
+.vendor-orders-page .nav-tabs {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.vendor-orders-page .nav-tab {
+    padding: 0.75rem 1.25rem;
+    color: var(--text-muted);
+    border: none;
+    background: none;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s;
+    font-size: 1rem;
+}
+
+.vendor-orders-page .nav-tab:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+}
+
+.vendor-orders-page .nav-tab.active {
+    background: rgba(0, 217, 255, 0.1);
+    color: var(--accent);
+}
+
+.vendor-orders-page .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.vendor-orders-page .user-menu {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 1rem;
+    background: var(--surface-light);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.vendor-orders-page .user-avatar {
+    width: 36px;
+    height: 36px;
+    background: var(--accent);
+    color: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+/* Main Header */
+.vendor-orders-page .main-header {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.vendor-orders-page .header-left {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.vendor-orders-page .page-title {
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.vendor-orders-page .settings-btn {
+    width: 44px;
+    height: 44px;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    position: relative;
+    transition: all 0.2s;
+}
+
+.vendor-orders-page .settings-btn:hover {
+    border-color: var(--accent);
+}
+
+.settings-dropdown {
+    position: absolute;
+    top: 110%;
+    right: 0;
+    width: 200px;
+    background: #000;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 0.5rem;
+    z-index: 100;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+}
+
+.settings-option {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.8rem 1rem;
+    color: #fff;
+    background: transparent;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.95rem;
+    width: 100%;
+    text-align: left;
+    transition: background 0.2s;
+}
+
+.settings-option:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.option-icon {
+    font-size: 1.2rem;
+    color: var(--text-muted);
+}
+
+.vendor-orders-page .btn-new {
+    padding: 0.875rem 2rem;
+    background: linear-gradient(135deg, #ec4899, #8b5cf6);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 1rem;
+}
+
+.vendor-orders-page .header-actions {
+    display: flex;
+    gap: 1rem;
+    align-items: center;
+}
+
+.vendor-orders-page .search-box {
+    position: relative;
+}
+
+.vendor-orders-page .search-input {
+    padding: 0.875rem 3rem 0.875rem 1.25rem;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    min-width: 300px;
+}
+
+.vendor-orders-page .search-btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+}
+
+.vendor-orders-page .action-btns {
+    display: flex;
+    gap: 0.75rem;
+}
+
+.vendor-orders-page .action-btn {
+    padding: 0.875rem 1.5rem;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.vendor-orders-page .view-controls {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.vendor-orders-page .view-btn {
+    width: 52px;
+    height: 52px;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.3rem;
+    transition: all 0.3s;
+}
+
+.vendor-orders-page .view-btn.active {
+    background: white;
+    border-color: white;
+    color: var(--primary);
+}
+
+/* Sidebar Filter */
+.vendor-orders-page .content-wrapper {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    gap: 2rem;
+    padding: 0 2rem 2rem;
+}
+
+.vendor-orders-page .sidebar {
+    width: 250px;
+    flex-shrink: 0;
+}
+
+.vendor-orders-page .filter-section {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+}
+
+.vendor-orders-page .filter-title {
+    font-weight: 700;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.vendor-orders-page .filter-count {
+    background: var(--surface-light);
+    padding: 0.25rem 0.75rem;
+    border-radius: 12px;
+    font-size: 0.85rem;
+}
+
+.vendor-orders-page .filter-item {
+    padding: 0.75rem;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.vendor-orders-page .filter-item:hover {
+    background: rgba(0, 217, 255, 0.05);
+}
+
+.vendor-orders-page .filter-item.active {
+    background: rgba(0, 217, 255, 0.1);
+    color: var(--accent);
+}
+
+.vendor-orders-page .filter-item-count {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+}
+
+/* Main Content */
+.vendor-orders-page .main-content {
+    flex: 1;
+}
+
+/* Kanban View */
+.vendor-orders-page .kanban-view {
+    display: none;
+}
+
+.vendor-orders-page .kanban-view.active {
+    display: block;
+}
+
+.vendor-orders-page .kanban-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+
+.vendor-orders-page .kanban-card {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.vendor-orders-page .kanban-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-4px);
+}
+
+.vendor-orders-page .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 1rem;
+}
+
+.vendor-orders-page .card-customer {
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.vendor-orders-page .card-order {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.vendor-orders-page .card-product {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.vendor-orders-page .card-price {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--accent);
+    margin-bottom: 1rem;
+}
+
+.vendor-orders-page .card-duration {
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    margin-bottom: 1rem;
+}
+
+.vendor-orders-page .status-badge {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    font-weight: 700;
+}
+
+.vendor-orders-page .status-sale-order {
+    background: rgba(245, 158, 11, 0.2);
+    color: var(--warning);
+}
+
+.vendor-orders-page .status-confirmed {
+    background: rgba(16, 185, 129, 0.2);
+    color: var(--success);
+}
+
+.vendor-orders-page .status-cancelled {
+    background: rgba(239, 68, 68, 0.2);
+    color: var(--danger);
+}
+
+.vendor-orders-page .status-invoiced {
+    background: rgba(59, 130, 246, 0.2);
+    color: #3b82f6;
+}
+
+.vendor-orders-page .status-quotation {
+    background: rgba(139, 92, 246, 0.2);
+    color: var(--purple);
+}
+
+.vendor-orders-page .status-dependable {
+    background: rgba(59, 130, 246, 0.2);
+    color: #3b82f6;
+}
+
+/* List View */
+.vendor-orders-page .list-view {
+    display: none;
+}
+
+.vendor-orders-page .list-view.active {
+    display: block;
+}
+
+.vendor-orders-page .rental-status-label {
+    position: fixed;
+    left: 2rem;
+    top: 50%;
+    transform: translateY(-50%) rotate(-90deg);
+    transform-origin: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--text-muted);
+}
+
+.vendor-orders-page .list-table {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    margin-left: 3rem;
+}
+
+.vendor-orders-page table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.vendor-orders-page thread {
+    background: var(--surface-light);
+}
+
+.vendor-orders-page th {
+    text-align: left;
+    padding: 1.25rem 1.5rem;
+    font-weight: 700;
+    border-bottom: 2px solid var(--border);
+}
+
+.vendor-orders-page td {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.vendor-orders-page tbody tr {
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.vendor-orders-page tbody tr:hover {
+    background: rgba(0, 217, 255, 0.05);
+}
+
+.vendor-orders-page .checkbox-cell {
+    width: 50px;
+}
+
+.vendor-orders-page .custom-checkbox {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.vendor-orders-page .custom-checkbox.checked {
+    background: var(--accent);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--primary);
+    font-weight: bold;
+}
+
+@media (max-width: 1024px) {
+    .vendor-orders-page .sidebar {
+        display: none;
+    }
+
+    .vendor-orders-page .kanban-grid {
+        grid-template-columns: 1fr;
+    }
+}

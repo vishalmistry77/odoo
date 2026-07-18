@@ -1,0 +1,261 @@
+/* CustomerOrders.css - Dark Theme */
+.customer-orders-page {
+    min-height: 100vh;
+    background-color: #121212;
+    /* Dark background matching others */
+    color: #f3f4f6;
+    padding-bottom: 2rem;
+}
+
+.orders-container {
+    max-width: 1200px;
+    margin: 2rem auto;
+    padding: 0 1rem;
+}
+
+.page-header {
+    margin-bottom: 2rem;
+}
+
+.page-header h1 {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+}
+
+.page-header p {
+    color: #9ca3af;
+}
+
+/* Navbar overrides/matches */
+.top-nav {
+    background-color: #1e1e1e;
+    border-bottom: 1px solid #333;
+    padding: 1rem 0;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 1rem;
+}
+
+/* User Dropdown */
+.user-dropdown {
+    position: absolute;
+    top: 120%;
+    right: 0;
+    width: 200px;
+    background: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    z-index: 50;
+    padding: 0.5rem;
+}
+
+.dropdown-header {
+    padding: 0.5rem 1rem;
+    border-bottom: 1px solid #333;
+    margin-bottom: 0.5rem;
+}
+
+.d-name {
+    font-weight: 600;
+}
+
+.d-email {
+    font-size: 0.8rem;
+    color: #9ca3af;
+}
+
+.dropdown-item {
+    display: block;
+    padding: 0.5rem 1rem;
+    color: #f3f4f6;
+    text-decoration: none;
+    border-radius: 4px;
+    text-align: left;
+    width: 100%;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background: #333;
+}
+
+.logout-btn {
+    color: #ef4444;
+}
+
+
+/* Orders Grid */
+.orders-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+}
+
+.customer-order-card {
+    background: #1e1e1e;
+    border: 1px solid #333;
+    border-radius: 12px;
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s;
+}
+
+.customer-order-card:hover {
+    border-color: #555;
+    transform: translateY(-2px);
+}
+
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+}
+
+.order-info h3 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.order-date {
+    font-size: 0.85rem;
+    color: #9ca3af;
+    margin-top: 0.25rem;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+.bg-gray-500 {
+    background: #4b5563;
+    color: white;
+}
+
+.bg-blue-500 {
+    background: #3b82f6;
+    color: white;
+}
+
+.bg-indigo-500 {
+    background: #6366f1;
+    color: white;
+}
+
+.bg-green-500 {
+    background: #10b981;
+    color: white;
+}
+
+.bg-purple-500 {
+    background: #8b5cf6;
+    color: white;
+}
+
+.bg-teal-500 {
+    background: #14b8a6;
+    color: white;
+}
+
+.bg-red-500 {
+    background: #ef4444;
+    color: white;
+}
+
+
+.card-items {
+    flex: 1;
+    margin-bottom: 1rem;
+    border-top: 1px solid #333;
+    border-bottom: 1px solid #333;
+    padding: 1rem 0;
+}
+
+.order-item-row {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.more-items {
+    font-size: 0.8rem;
+    color: #9ca3af;
+    margin-top: 0.5rem;
+}
+
+.card-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.order-total {
+    display: flex;
+    flex-direction: column;
+}
+
+.order-total span:first-child {
+    font-size: 0.75rem;
+    color: #9ca3af;
+}
+
+.order-total .amount {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #f3f4f6;
+}
+
+.btn-pay-now {
+    background: var(--accent, #6366f1);
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.btn-pay-now:hover {
+    background: #4f46e5;
+}
+
+.btn-view-invoice {
+    background: transparent;
+    border: 1px solid #555;
+    color: #f3f4f6;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-view-invoice:hover {
+    background: #333;
+}
+
+.loading-state,
+.empty-state {
+    text-align: center;
+    padding: 4rem;
+    color: #9ca3af;
+    background: #1e1e1e;
+    border-radius: 12px;
+}

@@ -1,0 +1,237 @@
+/* Admin Dashboard - Top Navigation Layout */
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap');
+
+:root {
+  --primary: #8b5cf6;
+  /* Violet */
+  --primary-hover: #7c3aed;
+  --secondary: #ec4899;
+  /* Pink */
+  --background: #0f172a;
+  /* Slate 900 */
+  --surface: #1e293b;
+  /* Slate 800 */
+  --surface-hover: #334155;
+  --surface-light: #252b4a;
+  /* Legacy var support */
+  --text: #f8fafc;
+  --text-muted: #94a3b8;
+  --border: #334155;
+  --success: #10b981;
+  --warning: #f59e0b;
+  --danger: #ef4444;
+  --accent: #00d9ff;
+  /* Legacy var support */
+}
+
+/* Page Container - Full Width & Height, Dark Background */
+.admin-dashboard-page {
+  min-height: 100vh;
+  width: 100%;
+  background-color: var(--background);
+  color: var(--text);
+  font-family: 'Outfit', sans-serif;
+  display: flex;
+  flex-direction: column;
+  overflow-x: hidden;
+}
+
+/* Top Navigation */
+.top-nav {
+  background-color: var(--surface);
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  padding: 0 2rem;
+  height: 70px;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.nav-container {
+  max-width: 1600px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.nav-left {
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+}
+
+.nav-tabs {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.nav-tab {
+  padding: 0.5rem 1rem;
+  color: var(--text-muted);
+  border-radius: 6px;
+  font-weight: 500;
+  transition: all 0.2s;
+  font-size: 0.95rem;
+  text-decoration: none;
+}
+
+.nav-tab:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+}
+
+.nav-tab.active {
+  background-color: var(--primary);
+  color: white;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.user-menu {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+.user-menu:hover {
+  background-color: var(--surface-hover);
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background-color: var(--secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: white;
+  font-size: 0.9rem;
+}
+
+/* Main Content Area */
+.admin-main {
+  flex: 1;
+  width: 100%;
+  max-width: 1600px;
+  margin: 0 auto;
+  padding: 2rem;
+  box-sizing: border-box;
+}
+
+/* Legacy Header Classes (Used by Dashboard Grid) */
+.admin-header {
+  margin-bottom: 2rem;
+}
+
+.admin-header h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.admin-header-subtitle {
+  color: var(--text-muted);
+}
+
+/* Metrics Grid */
+.admin-metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+}
+
+.admin-metric-card {
+  background-color: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  position: relative;
+  transition: transform 0.2s;
+}
+
+.admin-metric-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--primary);
+}
+
+.admin-metric-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.admin-metric-value {
+  font-size: 2.25rem;
+  font-weight: 700;
+  font-family: 'JetBrains Mono', monospace;
+  margin-bottom: 0.5rem;
+  color: var(--text);
+}
+
+.admin-metric-label {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+.admin-metric-change {
+  font-size: 0.85rem;
+  font-weight: 500;
+}
+
+.admin-change-positive {
+  color: var(--success);
+}
+
+.admin-change-negative {
+  color: var(--danger);
+}
+
+.admin-metric-icon {
+  width: 48px;
+  height: 48px;
+  background-color: rgba(139, 92, 246, 0.1);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+}
+
+/* Helper Classes */
+.text-accent {
+  color: var(--accent);
+}
+
+.bg-surface {
+  background-color: var(--surface);
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .nav-container {
+    padding: 0 1rem;
+  }
+
+  .nav-left {
+    gap: 1rem;
+  }
+}

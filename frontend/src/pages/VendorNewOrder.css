@@ -1,0 +1,604 @@
+/* VendorNewOrder.css */
+.vendor-new-order-page {
+    /* Standard Theme Variables from Dashboard */
+    --primary: #0a0e27;
+    --accent: #00d9ff;
+    --accent-warm: #ff6b35;
+    --surface: #1a1f3a;
+    --surface-light: #252b4a;
+    --text: #e8eaf0;
+    --text-muted: #9ca3af;
+    --border: rgba(255, 255, 255, 0.1);
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --panel-dark: #1e2130;
+
+    /* Specific for New Order */
+    --accent-purple: #8b5cf6;
+    /* Sale Order/Invoice */
+    --accent-pink: #d946ef;
+    /* Send */
+}
+
+/* --- Navigation (Copied from VendorDashboard.css) --- */
+.top-nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 2rem;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav-left {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+}
+
+.logo h1 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, var(--accent), var(--accent-warm));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin: 0;
+}
+
+.nav-tabs {
+    display: flex;
+    gap: 0.5rem;
+}
+
+.nav-tab {
+    padding: 0.75rem 1.25rem;
+    color: var(--text-muted);
+    border: none;
+    background: none;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 8px;
+    transition: all 0.3s;
+}
+
+.nav-tab:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+}
+
+.nav-tab.active {
+    background: rgba(0, 217, 255, 0.1);
+    color: var(--accent);
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+}
+
+.user-menu {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 1rem;
+    background: var(--surface-light);
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    cursor: pointer;
+    position: relative;
+}
+
+.user-avatar {
+    width: 36px;
+    height: 36px;
+    background: var(--accent);
+    color: var(--primary);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+}
+
+.user-dropdown-menu {
+    position: absolute;
+    top: 120%;
+    right: 0;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 0.5rem;
+    min-width: 150px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.dropdown-item {
+    padding: 0.75rem 1rem;
+    border-radius: 8px;
+    color: var(--text);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    transition: all 0.2s;
+    background: none;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-family: inherit;
+    font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.dropdown-item:hover {
+    background: var(--surface-light);
+    color: var(--accent);
+}
+
+.vendor-new-order-page {
+    font-family: 'Outfit', sans-serif;
+    background-color: var(--primary);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* --- Control Panel (Inner Actions) --- */
+.control-panel {
+    background-color: transparent;
+    /* Blend with card */
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 0;
+    /* Remove horizontal padding as it's inside card */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 2rem;
+}
+
+.action-bar {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.btn-action-primary {
+    background-color: #d946ef;
+    /* Pink */
+    color: white;
+    border: none;
+    padding: 0.5rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.2);
+    font-size: 0.9rem;
+    transition: filter 0.2s;
+}
+
+.btn-action-primary:hover {
+    filter: brightness(1.1);
+}
+
+.btn-action-secondary {
+    background-color: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    transition: background 0.2s;
+}
+
+.btn-action-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.btn-action-accent {
+    background-color: #c084fc;
+    /* Light Purple for Invoice */
+    color: #3b0764;
+    border: none;
+    padding: 0.5rem 1.2rem;
+    border-radius: 8px;
+    font-weight: 700;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-left: 0.5rem;
+}
+
+.btn-action-accent:hover {
+    filter: brightness(1.1);
+}
+
+.tag-purple-pill {
+    background-color: #4c1d95;
+    color: #fff;
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    margin-left: 1rem;
+    font-weight: 500;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* --- Pipeline Status --- */
+.pipeline-status {
+    display: flex;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--surface-light);
+}
+
+.pipeline-step {
+    padding: 0.5rem 1.2rem;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    font-weight: 500;
+    position: relative;
+    cursor: default;
+    border-right: 1px solid var(--border);
+    background: transparent;
+}
+
+.pipeline-step:last-child {
+    border-right: none;
+}
+
+.pipeline-step.active {
+    background-color: #1f2937;
+    /* Darker active state */
+    color: white;
+    font-weight: 600;
+}
+
+/* --- Main Form Card --- */
+.page-content-wrapper {
+    flex: 1;
+    padding: 2rem 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--primary);
+}
+
+.order-form-card {
+    background-color: var(--surface);
+    /* Dark Card */
+    width: 100%;
+    max-width: 1400px;
+    border-radius: 0;
+    /* Full width feel in mockup or slight radius */
+    padding: 2rem 3rem;
+    border: 1px solid var(--border);
+    box-shadow: none;
+}
+
+.order-header-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    gap: 1rem;
+}
+
+.badge-purple {
+    background-color: #d8b4fe;
+    color: #3b0764;
+    padding: 0.25rem 0.8rem;
+    border-radius: 6px;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+.form-title {
+    font-size: 1.5rem;
+    font-weight: 400;
+    color: var(--text);
+    margin: 0;
+    font-family: 'Outfit', sans-serif;
+    /* Handwriting feel in mockup, but clean here */
+}
+
+.toggle-icons {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+    margin-left: 0.5rem;
+}
+
+.icon-box {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+    color: white;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: transform 0.1s;
+}
+
+.icon-box:active {
+    transform: scale(0.95);
+}
+
+.icon-check {
+    background-color: #10b981;
+    /* Green */
+    border: 1px solid #059669;
+}
+
+.icon-close {
+    border: 2px solid #ef4444;
+    /* Red Outline */
+    color: #ef4444;
+    background: transparent;
+}
+
+
+.order-number-display {
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    font-weight: 400;
+    color: var(--text);
+    font-family: 'Outfit', sans-serif;
+}
+
+/* --- Form Grid --- */
+.form-grid-layout {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8rem;
+    /* Large gap per mockup */
+    margin-bottom: 4rem;
+}
+
+.form-col {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.form-field-row {
+    display: grid;
+    grid-template-columns: 140px 1fr;
+    align-items: center;
+    min-height: 2rem;
+}
+
+.form-field-row label {
+    font-weight: 500;
+    color: var(--text);
+    font-size: 1rem;
+}
+
+.input-standard {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #4b5563;
+    color: white;
+    padding: 0.25rem 0;
+    width: 100%;
+    font-size: 1rem;
+    font-family: inherit;
+    transition: border-color 0.2s;
+}
+
+.input-standard option {
+    background-color: var(--panel-dark);
+    color: white;
+    padding: 10px;
+}
+
+.input-standard:focus {
+    outline: none;
+    border-bottom-color: var(--accent);
+}
+
+.date-range-group {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.date-range-group .arrow {
+    color: var(--text-secondary);
+}
+
+/* --- Tabs & Table --- */
+.tabs-bar {
+    display: flex;
+    gap: 2rem;
+    border-bottom: 1px solid var(--border-color);
+    margin-bottom: 1.5rem;
+}
+
+.tab-link {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    padding-bottom: 0.6rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-size: 0.95rem;
+}
+
+.tab-link.active {
+    color: white;
+    border-bottom: 2px solid white;
+}
+
+.order-lines-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.order-lines-table th {
+    text-align: left;
+    color: var(--text-primary);
+    font-weight: 600;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid var(--border-color);
+    font-size: 0.9rem;
+}
+
+.order-lines-table td {
+    padding: 0.8rem 0;
+    border-bottom: 1px solid var(--border-color);
+    vertical-align: top;
+    font-size: 0.95rem;
+}
+
+.input-table {
+    background: transparent;
+    border: none;
+    color: white;
+    width: 100%;
+    padding: 0.2rem;
+    font-family: inherit;
+    font-size: 0.95rem;
+}
+
+.input-table:focus {
+    background: #2d3748;
+    border-radius: 2px;
+    outline: none;
+}
+
+.link-action-blue {
+    background: none;
+    border: none;
+    color: #3b82f6;
+    cursor: pointer;
+    font-size: 0.9rem;
+    margin-right: 1.5rem;
+    padding: 0;
+    margin-top: 1rem;
+}
+
+.link-action-blue:hover {
+    text-decoration: underline;
+}
+
+/* --- Footer & Totals --- */
+.footer-layout {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2rem;
+    padding-top: 1rem;
+    align-items: flex-start;
+}
+
+.footer-left {
+    flex: 1;
+}
+
+.footer-right {
+    width: 350px;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+.link-blue {
+    color: #3b82f6;
+    text-decoration: none;
+    font-size: 0.9rem;
+}
+
+/* Coupon/Discount/Shipping Buttons */
+.financial-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-end;
+    margin-bottom: 1rem;
+}
+
+.btn-small-outline {
+    background: transparent;
+    border: 1px solid #4a5568;
+    color: var(--text-secondary);
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+/* Totals Display */
+.totals-display {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.total-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    padding: 0.2rem 0;
+}
+
+.total-row.grand-total-line {
+    border-top: 1px solid var(--border-color);
+    padding-top: 0.8rem;
+    margin-top: 0.5rem;
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.input-mini-right {
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid #555;
+    color: white;
+    text-align: right;
+    width: 80px;
+}
+
+@media print {
+    .no-print {
+        display: none !important;
+    }
+
+    .vendor-new-order-page {
+        background: white;
+        color: black;
+    }
+
+    .order-form-card {
+        border: none;
+        box-shadow: none;
+        padding: 0;
+    }
+
+    .input-standard,
+    .input-table {
+        border-bottom: 1px solid #ccc;
+        color: black;
+    }
+
+    .control-panel {
+        display: none;
+    }
+}

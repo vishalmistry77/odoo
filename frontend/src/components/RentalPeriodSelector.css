@@ -1,0 +1,100 @@
+.rental-period-selector {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+}
+
+.rental-period-selector h3 {
+    margin: 0 0 1rem 0;
+    font-size: 1.1rem;
+    color: var(--text);
+    font-weight: 600;
+}
+
+.date-inputs {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.date-input-group {
+    flex: 1;
+    min-width: 200px;
+}
+
+.date-input-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.date-input-group input[type="date"] {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface-light);
+    color: var(--text);
+    font-size: 1rem;
+    transition: all 0.2s ease;
+}
+
+.date-input-group input[type="date"]:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.1);
+}
+
+.date-input-group input[type="date"]:hover {
+    border-color: var(--accent);
+}
+
+.date-arrow {
+    font-size: 1.5rem;
+    color: var(--text-muted);
+    margin-top: 1.5rem;
+}
+
+.duration-display {
+    margin-top: 1rem;
+    padding: 0.75rem 1rem;
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), rgba(59, 130, 246, 0.1));
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.duration-label {
+    font-size: 0.9rem;
+    color: var(--text-muted);
+    font-weight: 500;
+}
+
+.duration-value {
+    font-size: 1rem;
+    color: var(--accent);
+    font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .date-inputs {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .date-arrow {
+        transform: rotate(90deg);
+        margin: 0.5rem 0;
+    }
+
+    .date-input-group {
+        min-width: 100%;
+    }
+}

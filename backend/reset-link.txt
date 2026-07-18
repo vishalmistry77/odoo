@@ -1,0 +1,4 @@
+Last generated reset link:
+http://localhost:5173/reset-password?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiJhZTY4Nzk5NC1mM2I4LTQ4NzItYTAzYS02NmE2NWNjOTFhNGYiLCJ0eXBlIjoicmVzZXQiLCJpYXQiOjE3Njk4NTQ5MTQsImV4cCI6MTc2OTg1NTgxNH0.v0WWGnHZaNpVlqYSENex_PXn-YOGzsSUjKS6tfz19A0
+
+Generated at: 2026-01-31T10:21:54.159Z
