@@ -124,9 +124,9 @@ const Dashboard = () => {
                                     <div className="dropdown-user-name">{displayName}</div>
                                     <div className="dropdown-user-email">{email}</div>
                                 </div>
-                                <Link to="/vendor/profile" className="dropdown-item"><span>👤</span><span>My account/ My Profile</span></Link>
+                                <Link to="/customer/settings" className="dropdown-item"><span>👤</span><span>My account/ My Profile</span></Link>
                                 <Link to={user?.role === 'VENDOR' ? '/vendor/orders' : '/customer/orders'} className="dropdown-item"><span>📦</span><span>My Orders</span></Link>
-                                <Link to="#" className="dropdown-item"><span>⚙️</span><span>Settings</span></Link>
+                                <Link to="/customer/settings" className="dropdown-item"><span>⚙️</span><span>Settings</span></Link>
                                 <div className="dropdown-divider" />
                                 <button onClick={handleLogout} className="dropdown-item"><span>🚪</span><span>Logout</span></button>
                             </div>

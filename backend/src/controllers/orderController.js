@@ -75,7 +75,7 @@ const createOrder = async (req, res) => {
             userId = req.body.customerId;
         }
         // Extract all new fields
-        const { items, total, untaxedAmount, taxAmount, discountAmount, shippingCost, note } = req.body;
+        const { items, total, untaxedAmount, taxAmount, discountAmount, shippingCost, deliveryAddress, billingAddress, note } = req.body;
 
         if (!items || items.length === 0) {
             return res.status(400).json({ success: false, message: 'No items in order' });
@@ -96,6 +96,8 @@ const createOrder = async (req, res) => {
                     taxAmount: taxAmount || 0,
                     discountAmount: discountAmount || 0,
                     shippingCost: shippingCost || 0,
+                    deliveryAddress: deliveryAddress?.trim() || null,
+                    billingAddress: billingAddress?.trim() || deliveryAddress?.trim() || null,
                     note: note || null,
                     status: 'QUOTATION',
                     items: {
@@ -470,6 +472,8 @@ const createCheckoutRazorpayOrder = async (req, res) => {
         const cart = await cartService.getOrCreateCart(req.user.userId);
         if (!cart.items.length) return res.status(400).json({ success: false, message: 'Your cart is empty.' });
 
+        const deliveryAddress = req.body?.deliveryAddress?.trim() || null;
+        const billingAddress = req.body?.billingAddress?.trim() || deliveryAddress;
         const orderNumber = `SO${Date.now().toString().slice(-6)}`;
         const order = await prisma.$transaction(async (tx) => {
             const createdOrder = await tx.order.create({
@@ -479,6 +483,8 @@ const createCheckoutRazorpayOrder = async (req, res) => {
                     totalAmount: cart.total,
                     untaxedAmount: cart.total,
                     discountAmount: cart.discountAmount || 0,
+                    deliveryAddress,
+                    billingAddress,
                     status: 'SALES_ORDER',
                     lockedTotalAmount: cart.total,
                     priceLockedAt: new Date(),
@@ -519,6 +525,8 @@ const createCodCheckoutOrder = async (req, res) => {
         const cart = await cartService.getOrCreateCart(req.user.userId);
         if (!cart.items.length) return res.status(400).json({ success: false, message: 'Your cart is empty.' });
 
+        const deliveryAddress = req.body?.deliveryAddress?.trim() || null;
+        const billingAddress = req.body?.billingAddress?.trim() || deliveryAddress;
         const orderNumber = `SO${Date.now().toString().slice(-6)}`;
         const order = await prisma.$transaction(async (tx) => {
             const createdOrder = await tx.order.create({
@@ -528,6 +536,8 @@ const createCodCheckoutOrder = async (req, res) => {
                     totalAmount: cart.total,
                     untaxedAmount: cart.total,
                     discountAmount: cart.discountAmount || 0,
+                    deliveryAddress,
+                    billingAddress,
                     status: 'SALES_ORDER',
                     lockedTotalAmount: cart.total,
                     priceLockedAt: new Date(),

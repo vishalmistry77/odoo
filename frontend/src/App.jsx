@@ -34,6 +34,7 @@ const AdminProducts = lazy(() => import('./legacy-pages/AdminProducts'));
 const AdminUsers = lazy(() => import('./legacy-pages/AdminUsers'));
 const AdminReports = lazy(() => import('./legacy-pages/AdminReports'));
 const AdminSettings = lazy(() => import('./legacy-pages/AdminSettings'));
+const CustomerSettings = lazy(() => import('./legacy-pages/CustomerSettings'));
 import CustomerDashboard from './legacy-pages/customer/CustomerDashboard';
 import CustomerOrders from './legacy-pages/customer/CustomerOrders';
 import CustomerOrderDetail from './legacy-pages/customer/CustomerOrderDetail';
@@ -187,6 +188,14 @@ function App() {
                                         element={
                                             <ProtectedRoute>
                                                 <CustomerOrderDetail />
+                                            </ProtectedRoute>
+                                        }
+                                    />
+                                    <Route
+                                        path="/customer/settings"
+                                        element={
+                                            <ProtectedRoute requiredRole="CUSTOMER">
+                                                <CustomerSettings />
                                             </ProtectedRoute>
                                         }
                                     />

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate, useParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
@@ -8,6 +8,7 @@ import './Payment.css';
 
 const Payment = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const { orderId } = useParams(); // Get order ID from URL if paying for existing order
     const { user, logout } = useAuth();
     const { cartItems, getCartTotal, getCartCount, clearCart, rentalPeriod } = useCart();
@@ -16,6 +17,7 @@ const Payment = () => {
     const [paymentMethod, setPaymentMethod] = useState('RAZORPAY');
     const [order, setOrder] = useState(null);
     const [loading, setLoading] = useState(false);
+    const deliveryAddress = location.state?.deliveryAddress || user?.address || '';
 
     const displayName = user?.name || 'User';
     const initials = displayName.split(/\s+/).map((n) => n[0]).join('').toUpperCase().slice(0, 2);
@@ -61,6 +63,12 @@ const Payment = () => {
     const handlePayment = async (e) => {
         e.preventDefault();
 
+        if (!orderId && !deliveryAddress.trim()) {
+            alert('Enter and save a delivery address before continuing to payment.');
+            navigate('/address');
+            return;
+        }
+
         try {
             if (orderId) {
                 setLoading(true);
@@ -95,7 +103,10 @@ const Payment = () => {
             } else {
                 setLoading(true);
                 if (paymentMethod === 'COD') {
-                    const response = await api.post('/orders/cod-checkout');
+                    const response = await api.post('/orders/cod-checkout', {
+                        deliveryAddress,
+                        billingAddress: deliveryAddress
+                    });
                     const checkoutOrderId = response.data.orderId || response.data.data?.id;
                     clearCart();
                     alert(response.data.message || 'COD order placed successfully.');
@@ -113,7 +124,10 @@ const Payment = () => {
                         document.body.appendChild(script);
                     });
                 }
-                const response = await api.post('/orders/razorpay-checkout');
+                const response = await api.post('/orders/razorpay-checkout', {
+                    deliveryAddress,
+                    billingAddress: deliveryAddress
+                });
                 const { key, order: razorpayOrder, orderId: checkoutOrderId } = response.data;
                 const razorpay = new window.Razorpay({
                     key, amount: razorpayOrder.amount, currency: razorpayOrder.currency, order_id: razorpayOrder.id,
@@ -243,30 +257,13 @@ const Payment = () => {
 
                         <div className="form-group">
                             <h3>Shipping Address</h3>
-                            <div className="form-row-2">
-                                <div className="input-group">
-                                    <label className="form-label">Address</label>
-                                    <input type="text" className="form-input" placeholder="Street Address" required />
-                                </div>
-                                <div className="input-group">
-                                    <label className="form-label">City</label>
-                                    <input type="text" className="form-input" required />
-                                </div>
+                            <label className="form-label">Saved delivery address</label>
+                            <div className="form-input" style={{ minHeight: '72px', whiteSpace: 'pre-wrap' }}>
+                                {deliveryAddress || 'No delivery address saved yet.'}
                             </div>
-                            <div className="form-row-3">
-                                <div className="input-group">
-                                    <label className="form-label">Zip Code</label>
-                                    <input type="text" className="form-input" required />
-                                </div>
-                                <div className="input-group">
-                                    <label className="form-label">State</label>
-                                    <input type="text" className="form-input" required />
-                                </div>
-                                <div className="input-group">
-                                    <label className="form-label">Country</label>
-                                    <input type="text" className="form-input" required />
-                                </div>
-                            </div>
+                            <Link to="/address" className="form-label" style={{ display: 'inline-block', marginTop: '0.75rem' }}>
+                                Edit delivery address
+                            </Link>
                         </div>
 
                         <button type="submit" disabled={loading} className="btn btn-pay-now" style={{ width: '100%', marginTop: '1rem' }}>

@@ -4,6 +4,9 @@ const { hashPassword, comparePassword, generateToken, generateResetToken, verify
 const couponService = require('./couponService');
 
 const EMAIL_VERIFICATION_TTL_MS = 10 * 60 * 1000;
+// Email delivery is optional for local development. Set EMAIL_VERIFICATION_REQUIRED=true
+// when SMTP is configured and inbox ownership must be verified before sign-in.
+const isEmailVerificationRequired = () => process.env.EMAIL_VERIFICATION_REQUIRED === 'true';
 
 const createEmailVerificationCode = async (userId) => {
     const code = crypto.randomInt(100000, 1000000).toString();
@@ -78,7 +81,7 @@ const login = async (email, password) => {
         throw new Error('Invalid email or password');
     }
 
-    if (!user.emailVerified) {
+    if (isEmailVerificationRequired() && !user.emailVerified) {
         const verificationCode = await createEmailVerificationCode(user.id);
         return {
             requiresEmailVerification: true,

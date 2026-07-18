@@ -3,6 +3,18 @@ const sendEmail = require('../utils/sendEmail');
 const fs = require('fs');
 const path = require('path');
 
+const isDatabaseUnavailable = (error) => {
+    const details = `${error?.code || ''} ${error?.message || ''}`.toLowerCase();
+    return [
+        'p1001',
+        'p1000',
+        "can't reach database server",
+        'database server',
+        'connection refused',
+        'authentication failed',
+    ].some((needle) => details.includes(needle));
+};
+
 const register = async (req, res) => {
     try {
         const result = await authService.signup(req.body);
@@ -17,8 +29,8 @@ const register = async (req, res) => {
         }
         const msg = error?.message || 'Registration failed';
         const status = error?.code === 'P2023' || msg.includes('exist') ? 500 : 400;
-        const message = msg.includes('connect') || error?.code === 'P1001'
-            ? 'Database is not available. Run migrations and check DATABASE_URL.'
+        const message = isDatabaseUnavailable(error)
+            ? 'Database is not available. Check the PostgreSQL connection settings.'
             : msg;
         return res.status(status).json({ success: false, message });
     }
@@ -73,8 +85,8 @@ const login = async (req, res) => {
         }
         const msg = error?.message || 'Login failed';
         const status = error?.code === 'P2023' || msg.includes('exist') ? 500 : 400;
-        const message = msg.includes('connect') || error?.code === 'P1001'
-            ? 'Database is not available. Run migrations and check DATABASE_URL.'
+        const message = isDatabaseUnavailable(error)
+            ? 'Database is not available. Check the PostgreSQL connection settings.'
             : msg;
         return res.status(status).json({ success: false, message });
     }

@@ -1,20 +1,41 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 import { useWishlist } from '../context/WishlistContext';
+import api from '../api/client';
 import './Address.css';
 
 const Address = () => {
     const navigate = useNavigate();
-    const { user, logout } = useAuth();
+    const { user, logout, updateUser } = useAuth();
     const { cartItems, getCartTotal, getCartCount, rentalPeriod } = useCart();
     const { wishlist } = useWishlist();
     const [selectedDelivery, setSelectedDelivery] = useState('standard');
     const [billingSameAsDelivery, setBillingSameAsDelivery] = useState(false);
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+    const [address, setAddress] = useState(user?.address || '');
+    const [isSavingAddress, setIsSavingAddress] = useState(false);
+    const [addressError, setAddressError] = useState('');
 
     const displayName = user?.name || 'User';
+
+    useEffect(() => {
+        const loadSavedAddress = async () => {
+            try {
+                const response = await api.get('/users/profile');
+                const profile = response.data?.data;
+                if (profile) {
+                    setAddress(profile.address || '');
+                    updateUser(profile);
+                }
+            } catch (error) {
+                console.error('Could not load the saved address:', error);
+            }
+        };
+
+        loadSavedAddress();
+    }, []);
 
     const handleLogout = () => {
         logout();
@@ -29,8 +50,34 @@ const Address = () => {
         setBillingSameAsDelivery(!billingSameAsDelivery);
     };
 
-    const handleContinue = () => {
-        navigate('/payment');
+    const saveAddress = async () => {
+        const trimmedAddress = address.trim();
+        if (!trimmedAddress) {
+            setAddressError('Enter the full delivery address before continuing.');
+            return null;
+        }
+
+        setAddressError('');
+        setIsSavingAddress(true);
+        try {
+            const response = await api.put('/users/profile', { address: trimmedAddress });
+            const updatedProfile = response.data?.data;
+            updateUser(updatedProfile || { address: trimmedAddress });
+            setAddress(trimmedAddress);
+            return trimmedAddress;
+        } catch (error) {
+            setAddressError(error.response?.data?.message || 'Could not save the address. Please try again.');
+            return null;
+        } finally {
+            setIsSavingAddress(false);
+        }
+    };
+
+    const handleContinue = async () => {
+        const savedAddress = await saveAddress();
+        if (savedAddress) {
+            navigate('/payment', { state: { deliveryAddress: savedAddress } });
+        }
     };
 
     return (
@@ -142,15 +189,22 @@ const Address = () => {
                         <h3>Delivery Address</h3>
                         <div className="address-card">
                             <div className="address-header">
-                                <div className="address-badge">Main Address</div>
-                                <button className="edit-btn">✏️</button>
+                                <div className="address-badge">Saved address</div>
                             </div>
                             <div className="address-name">{user?.name || 'Customer Name'}</div>
-                            <div className="address-text">
-                                123 Main Street, Apartment 4B<br />
-                                New York, NY 10001<br />
-                                United States
-                            </div>
+                            <label className="address-label" htmlFor="delivery-address">Full address</label>
+                            <textarea
+                                id="delivery-address"
+                                className="address-input"
+                                value={address}
+                                onChange={(event) => setAddress(event.target.value)}
+                                placeholder="House or flat number, street, area, city, state and PIN code"
+                                rows="4"
+                                autoComplete="street-address"
+                                aria-describedby="delivery-address-help"
+                            />
+                            <p id="delivery-address-help" className="address-help">This address is saved to your account and used for this order.</p>
+                            {addressError && <p className="address-error" role="alert">{addressError}</p>}
                         </div>
                     </div>
 
@@ -212,7 +266,9 @@ const Address = () => {
                         </div>
 
                         {/* Buttons */}
-                        <button className="btn-continue" onClick={handleContinue}>Continue ›</button>
+                        <button className="btn-continue" onClick={handleContinue} disabled={isSavingAddress}>
+                            {isSavingAddress ? 'Saving address…' : 'Continue ›'}
+                        </button>
 
                         <div className="or-divider">OR</div>
 

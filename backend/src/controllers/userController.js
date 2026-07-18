@@ -81,7 +81,7 @@ const getCustomers = async (req, res) => {
     try {
         const customers = await prisma.user.findMany({
             where: { role: 'CUSTOMER' },
-            select: { id: true, name: true, email: true, companyName: true }
+            select: { id: true, name: true, email: true, companyName: true, address: true, phone: true }
         });
         res.status(200).json({ success: true, count: customers.length, data: customers });
     } catch (error) {

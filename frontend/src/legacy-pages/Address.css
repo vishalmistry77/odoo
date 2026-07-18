@@ -188,6 +188,47 @@
     line-height: 1.6;
 }
 
+.address-page .address-label {
+    display: block;
+    margin: 1rem 0 0.5rem;
+    color: var(--text);
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.address-page .address-input {
+    width: 100%;
+    min-height: 112px;
+    resize: vertical;
+    box-sizing: border-box;
+    padding: 0.85rem 1rem;
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font: inherit;
+    line-height: 1.5;
+}
+
+.address-page .address-input:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.address-page .address-help,
+.address-page .address-error {
+    margin: 0.5rem 0 0;
+    font-size: 0.85rem;
+}
+
+.address-page .address-help {
+    color: var(--text-muted);
+}
+
+.address-page .address-error {
+    color: #fca5a5;
+}
+
 /* Billing Address */
 .address-page .billing-toggle {
     display: flex;
@@ -320,6 +361,11 @@
 
 .address-page .btn-continue:hover {
     background: var(--accent-warm);
+}
+
+.address-page .btn-continue:disabled {
+    cursor: wait;
+    opacity: 0.7;
 }
 
 .address-page .btn-back {

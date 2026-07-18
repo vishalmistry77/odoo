@@ -15,6 +15,7 @@ const OrderSuccess = () => {
 
     const displayName = user?.name || 'User';
     const order = location.state?.order; // Retrieve order from navigation state
+    const deliveryAddress = order?.deliveryAddress || location.state?.deliveryAddress || user?.address || '';
 
     const handleLogout = () => {
         logout();
@@ -124,10 +125,8 @@ const OrderSuccess = () => {
                             <div className="address-badge">Delivery & Billing</div>
                         </div>
                         <div className="address-name">{user?.name || 'Customer Name'}</div>
-                        <div className="address-text">
-                            123 Main Street, Apartment 4B<br />
-                            New York, NY 10001<br />
-                            United States
+                        <div className="address-text" style={{ whiteSpace: 'pre-wrap' }}>
+                            {deliveryAddress || 'No delivery address was provided for this order.'}
                         </div>
                     </div>
 

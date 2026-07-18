@@ -133,6 +133,8 @@ const VendorNewOrder = () => {
                 taxAmount: taxes,
                 discountAmount: Number(discount),
                 shippingCost: Number(shippingCost),
+                deliveryAddress,
+                billingAddress: invoiceAddress,
                 total: totalAmount,
                 note: note,
                 startDate,
