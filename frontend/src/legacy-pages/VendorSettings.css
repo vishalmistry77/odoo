@@ -207,7 +207,8 @@
     font-weight: 600;
 }
 
-.form-group input {
+.form-group input,
+.form-group textarea {
     padding: 0.75rem 1rem;
     background: var(--surface-light);
     border: 1px solid var(--border);
@@ -232,4 +233,31 @@
     .form-grid {
         grid-template-columns: 1fr;
     }
+}
+
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(0, 217, 255, 0.1);
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 96px;
+}
+
+.settings-help,
+.settings-message {
+    margin: 0.5rem 0 0;
+    color: var(--text-muted);
+    font-size: 0.9rem;
+}
+
+.settings-message {
+    color: var(--accent);
+}
+
+.btn-primary:disabled {
+    cursor: wait;
+    opacity: 0.7;
 }
