@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RentFlow — Rental Management Made Effortless</title>
+  <meta name="description" content="RentFlow is a modern rental management platform that helps businesses track inventory, automate billing, and grow effortlessly." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+          },
+          colors: {
+            cream: '#FAF8F5',
+            sand: '#F3F0EB',
+            warm: '#EDE8E0',
+            charcoal: '#1A1A1A',
+            muted: '#6B6B6B',
+            accent: '#2D2D2D',
+          },
+        },
+      },
+    };
+  </script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    /* Subtle fade-in animation */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
+    }
+    .fade-up.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Navbar glass */
+    .nav-glass {
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      background: rgba(250, 248, 245, 0.85);
+    }
+
+    /* Pricing card hover lift */
+    .pricing-card {
+      transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.35s ease;
+    }
+    .pricing-card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+    }
+
+    /* Feature card subtle hover */
+    .feature-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .feature-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
+    }
+
+    /* Button hover fill */
+    .btn-primary {
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+    .btn-primary::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: #333;
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform 0.4s cubic-bezier(0.65, 0, 0.35, 1);
+      z-index: 0;
+    }
+    .btn-primary:hover::before {
+      transform: scaleX(1);
+      transform-origin: left;
+    }
+    .btn-primary span {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* Smooth underline for nav links */
+    .nav-link {
+      position: relative;
+    }
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: -2px; left: 0;
+      width: 0; height: 1px;
+      background: #1A1A1A;
+      transition: width 0.3s ease;
+    }
+    .nav-link:hover::after {
+      width: 100%;
+    }
+
+    /* Step connector line */
+    .step-line {
+      position: relative;
+    }
+    .step-line::after {
+      content: '';
+      position: absolute;
+      top: 28px;
+      right: -50%;
+      width: 100%;
+      height: 1px;
+      background: linear-gradient(to right, #d4d0c8, transparent);
+    }
+
+    /* Testimonial card */
+    .testimonial-card {
+      transition: transform 0.3s ease;
+    }
+    .testimonial-card:hover {
+      transform: scale(1.02);
+    }
+
+    /* Mobile menu */
+    .mobile-menu {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.4s ease;
+    }
+    .mobile-menu.open {
+      max-height: 400px;
+    }
+
+    /* Popular badge pulse */
+    @keyframes subtle-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+    .popular-badge {
+      animation: subtle-pulse 2.5s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="bg-cream text-charcoal font-sans antialiased">
+
+  <!-- ============ NAVBAR ============ -->
+  <nav class="nav-glass fixed top-0 left-0 w-full z-50 border-b border-warm/60">
+    <div class="max-w-7xl mx-auto px-6 lg:px-8">
+      <div class="flex items-center justify-between h-16 lg:h-20">
+        <!-- Logo -->
+        <a href="#" class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-charcoal rounded-lg flex items-center justify-center">
+            <svg class="w-4 h-4 text-cream" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" /></svg>
+          </div>
+          <span class="text-xl font-bold tracking-tight">RentFlow</span>
+        </a>
+
+        <!-- Desktop Links -->
+        <div class="hidden lg:flex items-center gap-10">
+          <a href="#features" class="nav-link text-sm font-medium text-muted hover:text-charcoal transition-colors">Features</a>
+          <a href="#pricing" class="nav-link text-sm font-medium text-muted hover:text-charcoal transition-colors">Pricing</a>
+          <a href="#how-it-works" class="nav-link text-sm font-medium text-muted hover:text-charcoal transition-colors">How it Works</a>
+          <a href="#contact" class="nav-link text-sm font-medium text-muted hover:text-charcoal transition-colors">Contact</a>
+        </div>
+
+        <!-- Desktop CTA -->
+        <div class="hidden lg:block">
+          <a href="#pricing" class="btn-primary inline-flex items-center bg-charcoal text-cream px-6 py-2.5 rounded-full text-sm font-semibold hover:bg-accent">
+            <span>Start Free Trial</span>
+          </a>
+        </div>
+
+        <!-- Mobile Toggle -->
+        <button id="menuToggle" class="lg:hidden flex flex-col gap-1.5 p-2" aria-label="Toggle menu">
+          <span class="block w-5 h-0.5 bg-charcoal transition-transform" id="bar1"></span>
+          <span class="block w-5 h-0.5 bg-charcoal transition-opacity" id="bar2"></span>
+          <span class="block w-5 h-0.5 bg-charcoal transition-transform" id="bar3"></span>
+        </button>
+      </div>
+
+      <!-- Mobile Menu -->
+      <div class="mobile-menu lg:hidden" id="mobileMenu">
+        <div class="pb-6 pt-2 flex flex-col gap-4 border-t border-warm/60">
+          <a href="#features" class="text-sm font-medium text-muted hover:text-charcoal transition-colors">Features</a>
+          <a href="#pricing" class="text-sm font-medium text-muted hover:text-charcoal transition-colors">Pricing</a>
+          <a href="#how-it-works" class="text-sm font-medium text-muted hover:text-charcoal transition-colors">How it Works</a>
+          <a href="#contact" class="text-sm font-medium text-muted hover:text-charcoal transition-colors">Contact</a>
+          <a href="#pricing" class="btn-primary inline-flex items-center justify-center bg-charcoal text-cream px-6 py-2.5 rounded-full text-sm font-semibold mt-2 w-full">
+            <span>Start Free Trial</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </nav>
+
+
+  <!-- ============ HERO ============ -->
+  <section class="pt-32 lg:pt-44 pb-20 lg:pb-32 px-6 lg:px-8">
+    <div class="max-w-5xl mx-auto text-center fade-up">
+      <!-- Pill badge -->
+      <div class="inline-flex items-center gap-2 bg-sand border border-warm rounded-full px-4 py-1.5 mb-8">
+        <span class="w-2 h-2 bg-emerald-500 rounded-full"></span>
+        <span class="text-xs font-medium text-muted tracking-wide uppercase">Trusted by 500+ rental businesses</span>
+      </div>
+
+      <h1 class="text-4xl sm:text-5xl lg:text-7xl font-bold leading-[1.08] tracking-tight mb-6">
+        Manage your rentals<br class="hidden sm:block" />
+        with <span class="italic font-light">effortless</span> clarity
+      </h1>
+
+      <p class="text-lg lg:text-xl text-muted max-w-2xl mx-auto mb-10 leading-relaxed">
+        Track inventory, automate billing, manage security deposits, and handle late fees — all from one beautiful dashboard built for rental businesses.
+      </p>
+
+      <!-- CTA Buttons -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#pricing" class="btn-primary inline-flex items-center bg-charcoal text-cream px-8 py-3.5 rounded-full text-sm font-semibold">
+          <span>Start Free Trial</span>
+          <svg class="w-4 h-4 ml-2 relative z-10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+        </a>
+        <a href="#how-it-works" class="inline-flex items-center gap-2 px-8 py-3.5 rounded-full text-sm font-semibold border border-charcoal/15 hover:border-charcoal/30 transition-colors">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M5.25 5.653c0-.856.917-1.398 1.667-.986l11.54 6.348a1.125 1.125 0 010 1.971l-11.54 6.347a1.125 1.125 0 01-1.667-.985V5.653z" /></svg>
+          View Demo
+        </a>
+      </div>
+
+      <!-- Trust metrics -->
+      <div class="mt-16 flex flex-wrap items-center justify-center gap-8 lg:gap-14 text-muted">
+        <div class="text-center">
+          <div class="text-2xl lg:text-3xl font-bold text-charcoal">500+</div>
+          <div class="text-xs font-medium uppercase tracking-wider mt-1">Businesses</div>
+        </div>
+        <div class="w-px h-10 bg-warm hidden sm:block"></div>
+        <div class="text-center">
+          <div class="text-2xl lg:text-3xl font-bold text-charcoal">50K+</div>
+          <div class="text-xs font-medium uppercase tracking-wider mt-1">Rentals Managed</div>
+        </div>
+        <div class="w-px h-10 bg-warm hidden sm:block"></div>
+        <div class="text-center">
+          <div class="text-2xl lg:text-3xl font-bold text-charcoal">99.9%</div>
+          <div class="text-xs font-medium uppercase tracking-wider mt-1">Uptime</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============ PROBLEM & SOLUTION ============ -->
+  <section class="py-20 lg:py-28 px-6 lg:px-8 bg-sand">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid lg:grid-cols-2 gap-16 lg:gap-20 items-start">
+        <!-- Problem -->
+        <div class="fade-up">
+          <div class="inline-flex items-center gap-2 bg-red-50 border border-red-100 rounded-full px-4 py-1.5 mb-6">
+            <span class="text-xs font-semibold text-red-600 uppercase tracking-wider">The Problem</span>
+          </div>
+          <h2 class="text-3xl lg:text-4xl font-bold leading-tight mb-6">
+            Running a rental business shouldn't feel like chaos
+          </h2>
+          <div class="space-y-5">
+            <div class="flex gap-4">
+              <div class="flex-shrink-0 w-6 h-6 mt-0.5 rounded-full bg-red-100 flex items-center justify-center">
+                <svg class="w-3 h-3 text-red-500" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+              </div>
+              <p class="text-muted leading-relaxed">Scattered spreadsheets make it impossible to track which items are rented, returned, or overdue.</p>
+            </div>
+            <div class="flex gap-4">
+              <div class="flex-shrink-0 w-6 h-6 mt-0.5 rounded-full bg-red-100 flex items-center justify-center">
+                <svg class="w-3 h-3 text-red-500" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+              </div>
+              <p class="text-muted leading-relaxed">Manually calculating late fees and security deposits drains hours every week and introduces costly errors.</p>
+            </div>
+            <div class="flex gap-4">
+              <div class="flex-shrink-0 w-6 h-6 mt-0.5 rounded-full bg-red-100 flex items-center justify-center">
+                <svg class="w-3 h-3 text-red-500" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>
+              </div>
+              <p class="text-muted leading-relaxed">No clear visibility across branches means decisions are made on gut feeling, not data.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Solution -->
+        <div class="fade-up">
+          <div class="inline-flex items-center gap-2 bg-emerald-50 border border-emerald-100 rounded-full px-4 py-1.5 mb-6">
+            <span class="text-xs font-semibold text-emerald-700 uppercase tracking-wider">The Solution</span>
+          </div>
+          <h2 class="text-3xl lg:text-4xl font-bold leading-tight mb-6">
+            RentFlow brings order, automation, and insight
+          </h2>
+          <div class="space-y-5">
+            <div class="flex gap-4">
+              <div class="flex-shrink-0 w-6 h-6 mt-0.5 rounded-full bg-emerald-100 flex items-center justify-center">
+                <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              </div>
+              <p class="text-muted leading-relaxed">A unified dashboard lets you see every product, order, and customer in real time — no more digging through files.</p>
+            </div>
+            <div class="flex gap-4">
+              <div class="flex-shrink-0 w-6 h-6 mt-0.5 rounded-full bg-emerald-100 flex items-center justify-center">
+                <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              </div>
+              <p class="text-muted leading-relaxed">Late fees, deposits, and invoices are calculated and applied automatically — saving time and eliminating mistakes.</p>
+            </div>
+            <div class="flex gap-4">
+              <div class="flex-shrink-0 w-6 h-6 mt-0.5 rounded-full bg-emerald-100 flex items-center justify-center">
+                <svg class="w-3 h-3 text-emerald-600" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              </div>
+              <p class="text-muted leading-relaxed">Advanced analytics and multi-branch support give you the clarity to scale confidently across locations.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============ FEATURES ============ -->
+  <section id="features" class="py-20 lg:py-28 px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16 fade-up">
+        <span class="text-xs font-semibold text-muted uppercase tracking-widest">Features</span>
+        <h2 class="text-3xl lg:text-5xl font-bold mt-3 mb-4">Everything you need to run rentals</h2>
+        <p class="text-muted max-w-xl mx-auto text-lg">Powerful tools designed specifically for rental businesses, wrapped in a simple interface.</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Feature 1 -->
+        <div class="feature-card bg-white border border-warm/60 rounded-2xl p-8 fade-up">
+          <div class="w-12 h-12 bg-sand rounded-xl flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-charcoal" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" /></svg>
+          </div>
+          <h3 class="text-lg font-semibold mb-2">Inventory Dashboard</h3>
+          <p class="text-muted text-sm leading-relaxed">Get a real-time view of all your rental products — available, rented out, or under maintenance — at a glance.</p>
+        </div>
+
+        <!-- Feature 2 -->
+        <div class="feature-card bg-white border border-warm/60 rounded-2xl p-8 fade-up">
+          <div class="w-12 h-12 bg-sand rounded-xl flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-charcoal" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          </div>
+          <h3 class="text-lg font-semibold mb-2">Automated Late Fees</h3>
+          <p class="text-muted text-sm leading-relaxed">Set your rules once. RentFlow automatically calculates and applies late fees based on your custom policies.</p>
+        </div>
+
+        <!-- Feature 3 -->
+        <div class="feature-card bg-white border border-warm/60 rounded-2xl p-8 fade-up">
+          <div class="w-12 h-12 bg-sand rounded-xl flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-charcoal" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" /></svg>
+          </div>
+          <h3 class="text-lg font-semibold mb-2">Security Deposits</h3>
+          <p class="text-muted text-sm leading-relaxed">Collect, track, and refund security deposits seamlessly with full audit trails for every transaction.</p>
+        </div>
+
+        <!-- Feature 4 -->
+        <div class="feature-card bg-white border border-warm/60 rounded-2xl p-8 fade-up">
+          <div class="w-12 h-12 bg-sand rounded-xl flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-charcoal" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" /></svg>
+          </div>
+          <h3 class="text-lg font-semibold mb-2">Advanced Analytics</h3>
+          <p class="text-muted text-sm leading-relaxed">Understand your revenue, top-performing products, and customer trends with clean, actionable reports.</p>
+        </div>
+
+        <!-- Feature 5 -->
+        <div class="feature-card bg-white border border-warm/60 rounded-2xl p-8 fade-up">
+          <div class="w-12 h-12 bg-sand rounded-xl flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-charcoal" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
+          </div>
+          <h3 class="text-lg font-semibold mb-2">Customer Management</h3>
+          <p class="text-muted text-sm leading-relaxed">Maintain detailed customer profiles with rental history, payment records, and communication logs.</p>
+        </div>
+
+        <!-- Feature 6 -->
+        <div class="feature-card bg-white border border-warm/60 rounded-2xl p-8 fade-up">
+          <div class="w-12 h-12 bg-sand rounded-xl flex items-center justify-center mb-5">
+            <svg class="w-6 h-6 text-charcoal" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 21h19.5m-18-18v18m10.5-18v18m6-13.5V21M6.75 6.75h.75m-.75 3h.75m-.75 3h.75m3-6h.75m-.75 3h.75m-.75 3h.75M6.75 21v-3.375c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21M3 3h12m-.75 4.5H21m-3.75 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008zm0 3h.008v.008h-.008v-.008z" /></svg>
+          </div>
+          <h3 class="text-lg font-semibold mb-2">Multi-Branch Support</h3>
+          <p class="text-muted text-sm leading-relaxed">Manage multiple locations from one account with branch-level reporting and role-based access control.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============ PRICING ============ -->
+  <section id="pricing" class="py-20 lg:py-28 px-6 lg:px-8 bg-sand">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16 fade-up">
+        <span class="text-xs font-semibold text-muted uppercase tracking-widest">Pricing</span>
+        <h2 class="text-3xl lg:text-5xl font-bold mt-3 mb-4">Simple pricing for every stage<br class="hidden sm:block" /> of your rental business</h2>
+        <p class="text-muted max-w-xl mx-auto text-lg">No hidden fees. No long-term contracts. Start free and upgrade as you grow.</p>
+      </div>
+
+      <div class="grid lg:grid-cols-3 gap-6 lg:gap-8 items-start">
+        <!-- Starter -->
+        <div class="pricing-card bg-white border border-warm/60 rounded-2xl p-8 lg:p-10 fade-up">
+          <div class="mb-6">
+            <h3 class="text-lg font-semibold mb-1">Starter</h3>
+            <p class="text-sm text-muted">Best for small rental shops</p>
+          </div>
+          <div class="mb-8">
+            <div class="flex items-baseline gap-1">
+              <span class="text-4xl lg:text-5xl font-bold tracking-tight">₹999</span>
+              <span class="text-muted text-sm font-medium">/ month</span>
+            </div>
+          </div>
+          <ul class="space-y-3.5 mb-10">
+            <li class="flex items-start gap-3 text-sm">
+              <svg class="w-5 h-5 text-charcoal flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              Basic Dashboard
+            </li>
+            <li class="flex items-start gap-3 text-sm">
+              <svg class="w-5 h-5 text-charcoal flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              Up to 50 products
+            </li>
+            <li class="flex items-start gap-3 text-sm">
+              <svg class="w-5 h-5 text-charcoal flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              Order management
+            </li>
+            <li class="flex items-start gap-3 text-sm">
+              <svg class="w-5 h-5 text-charcoal flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              Basic reports
+            </li>
+            <li class="flex items-start gap-3 text-sm">
+              <svg class="w-5 h-5 text-charcoal flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              Email support
+            </li>
+          </ul>
+          <button data-plan="starter" class="w-full py-3.5 rounded-full border-2 border-charcoal text-charcoal font-semibold text-sm hover:bg-charcoal hover:text-cream transition-all duration-300 cursor-pointer">
+            Get Started
+          </button>
+        </div>
+
+        <!-- Professional (Most Popular) -->
+        <div class="pricing-card relative bg-charcoal text-cream rounded-2xl p-8 lg:p-10 lg:-mt-4 lg:mb-[-16px] shadow-2xl fade-up">
+          <!-- Badge -->
+          <div class="popular-badge absolute -top-3.5 left-1/2 -translate-x-1/2">
+            <span class="bg-gradient-to-r from-amber-400 to-orange-400 text-charcoal text-xs font-bold uppercase tracking-wider px-5 py-1.5 rounded-full shadow-lg">Most Popular</span>
+          </div>
+          <div class="mb-6 mt-2">
+            <h3 class="text-lg font-semibold mb-1">Professional</h3>
+            <p class="text-sm text-cream/60">Best for growing rental businesses</p>
+          </div>
+          <div class="mb-8">
+            <div class="flex items-baseline gap-1">
+              <span class="text-4xl lg:text-5xl font-bold tracking-tight">₹2,999</span>
+              <span class="text-cream/60 text-sm font-medium">/ month</span>
+            </div>
+          </div>
+          <ul class="space-y-3.5 mb-10">
+            <li class="flex items-start gap-3 text-sm">
+              <svg class="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              Everything in Starter
+            </li>
+            <li class="flex items-start gap-3 text-sm">
+              <svg class="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              Unlimited products
+            </li>
+            <li class="flex items-start gap-3 text-sm">
+              <svg class="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              Automated Late Fee calculation
+            </li>
+            <li class="flex items-start gap-3 text-sm">
+              <svg class="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              Security Deposit management
+            </li>
+            <li class="flex items-start gap-3 text-sm">
+              <svg class="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              Advanced Analytics
+            </li>
+            <li class="flex items-start gap-3 text-sm">
+              <svg class="w-5 h-5 text-amber-400 flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              Priority support
+            </li>
+          </ul>
+          <button data-plan="professional" class="w-full py-3.5 rounded-full bg-cream text-charcoal font-semibold text-sm hover:bg-cream/90 transition-all duration-300 cursor-pointer">
+            Get Started
+          </button>
+        </div>
+
+        <!-- Enterprise -->
+        <div class="pricing-card bg-white border border-warm/60 rounded-2xl p-8 lg:p-10 fade-up">
+          <div class="mb-6">
+            <h3 class="text-lg font-semibold mb-1">Enterprise</h3>
+            <p class="text-sm text-muted">Best for multi-location rental companies</p>
+          </div>
+          <div class="mb-8">
+            <div class="flex items-baseline gap-1">
+              <span class="text-4xl lg:text-5xl font-bold tracking-tight">Custom</span>
+            </div>
+            <span class="text-muted text-sm font-medium">Tailored to your needs</span>
+          </div>
+          <ul class="space-y-3.5 mb-10">
+            <li class="flex items-start gap-3 text-sm">
+              <svg class="w-5 h-5 text-charcoal flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              Everything in Professional
+            </li>
+            <li class="flex items-start gap-3 text-sm">
+              <svg class="w-5 h-5 text-charcoal flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              Multi-branch support
+            </li>
+            <li class="flex items-start gap-3 text-sm">
+              <svg class="w-5 h-5 text-charcoal flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              Custom reports
+            </li>
+            <li class="flex items-start gap-3 text-sm">
+              <svg class="w-5 h-5 text-charcoal flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              Dedicated account manager
+            </li>
+            <li class="flex items-start gap-3 text-sm">
+              <svg class="w-5 h-5 text-charcoal flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              API access
+            </li>
+            <li class="flex items-start gap-3 text-sm">
+              <svg class="w-5 h-5 text-charcoal flex-shrink-0 mt-0.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" /></svg>
+              Custom integrations
+            </li>
+          </ul>
+          <button data-plan="enterprise" class="w-full py-3.5 rounded-full border-2 border-charcoal text-charcoal font-semibold text-sm hover:bg-charcoal hover:text-cream transition-all duration-300 cursor-pointer">
+            Contact Sales
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============ HOW IT WORKS ============ -->
+  <section id="how-it-works" class="py-20 lg:py-28 px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16 fade-up">
+        <span class="text-xs font-semibold text-muted uppercase tracking-widest">How it Works</span>
+        <h2 class="text-3xl lg:text-5xl font-bold mt-3 mb-4">Up and running in minutes</h2>
+        <p class="text-muted max-w-xl mx-auto text-lg">Four simple steps to transform how you manage your rental business.</p>
+      </div>
+
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6">
+        <!-- Step 1 -->
+        <div class="text-center fade-up">
+          <div class="w-14 h-14 bg-charcoal text-cream rounded-2xl flex items-center justify-center text-xl font-bold mx-auto mb-5">1</div>
+          <h3 class="text-base font-semibold mb-2">Create Your Account</h3>
+          <p class="text-sm text-muted leading-relaxed">Sign up in 30 seconds with just your email. No credit card required to start your free trial.</p>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="text-center fade-up">
+          <div class="w-14 h-14 bg-charcoal text-cream rounded-2xl flex items-center justify-center text-xl font-bold mx-auto mb-5">2</div>
+          <h3 class="text-base font-semibold mb-2">Add Your Inventory</h3>
+          <p class="text-sm text-muted leading-relaxed">Import your products via CSV or add them manually. Set pricing rules, deposit amounts, and late fee policies.</p>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="text-center fade-up">
+          <div class="w-14 h-14 bg-charcoal text-cream rounded-2xl flex items-center justify-center text-xl font-bold mx-auto mb-5">3</div>
+          <h3 class="text-base font-semibold mb-2">Start Renting</h3>
+          <p class="text-sm text-muted leading-relaxed">Create orders, track rentals, and collect payments. Everything is recorded automatically in your dashboard.</p>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="text-center fade-up">
+          <div class="w-14 h-14 bg-charcoal text-cream rounded-2xl flex items-center justify-center text-xl font-bold mx-auto mb-5">4</div>
+          <h3 class="text-base font-semibold mb-2">Grow & Scale</h3>
+          <p class="text-sm text-muted leading-relaxed">Use analytics to make smarter decisions. Add branches and team members as your business expands.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============ TESTIMONIALS ============ -->
+  <section class="py-20 lg:py-28 px-6 lg:px-8 bg-sand">
+    <div class="max-w-6xl mx-auto">
+      <div class="text-center mb-16 fade-up">
+        <span class="text-xs font-semibold text-muted uppercase tracking-widest">Testimonials</span>
+        <h2 class="text-3xl lg:text-5xl font-bold mt-3 mb-4">Loved by rental businesses</h2>
+      </div>
+
+      <div class="grid md:grid-cols-3 gap-6">
+        <!-- Testimonial 1 -->
+        <div class="testimonial-card bg-white border border-warm/60 rounded-2xl p-8 fade-up">
+          <div class="flex gap-1 mb-5">
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+          </div>
+          <p class="text-sm text-muted leading-relaxed mb-6">"RentFlow completely transformed our operations. We went from tracking everything in notebooks to having a clean dashboard that shows us exactly what's happening across all our inventory."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-charcoal rounded-full flex items-center justify-center text-cream text-sm font-bold">RK</div>
+            <div>
+              <div class="text-sm font-semibold">Rajesh Kumar</div>
+              <div class="text-xs text-muted">Owner, Kumar Equipment Rentals</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 2 -->
+        <div class="testimonial-card bg-white border border-warm/60 rounded-2xl p-8 fade-up">
+          <div class="flex gap-1 mb-5">
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+          </div>
+          <p class="text-sm text-muted leading-relaxed mb-6">"The automated late fee calculation alone saves us 10+ hours every week. Our team can now focus on growing the business instead of chasing payments manually."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-charcoal rounded-full flex items-center justify-center text-cream text-sm font-bold">PS</div>
+            <div>
+              <div class="text-sm font-semibold">Priya Sharma</div>
+              <div class="text-xs text-muted">Manager, CityRent Solutions</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Testimonial 3 -->
+        <div class="testimonial-card bg-white border border-warm/60 rounded-2xl p-8 fade-up">
+          <div class="flex gap-1 mb-5">
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+            <svg class="w-4 h-4 text-amber-400" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" /></svg>
+          </div>
+          <p class="text-sm text-muted leading-relaxed mb-6">"We manage three branches with RentFlow. The multi-location support and analytics give us visibility we never had before. It's become indispensable for our operations."</p>
+          <div class="flex items-center gap-3">
+            <div class="w-10 h-10 bg-charcoal rounded-full flex items-center justify-center text-cream text-sm font-bold">AM</div>
+            <div>
+              <div class="text-sm font-semibold">Arjun Mehta</div>
+              <div class="text-xs text-muted">Director, Mehta Party Rentals</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <!-- ============ FINAL CTA ============ -->
+  <section class="py-20 lg:py-28 px-6 lg:px-8">
+    <div class="max-w-4xl mx-auto text-center fade-up">
+      <h2 class="text-3xl lg:text-5xl font-bold mb-5">Ready to streamline your rental business?</h2>
+      <p class="text-lg text-muted mb-10 max-w-xl mx-auto">Join 500+ businesses already using RentFlow to manage inventory, automate billing, and grow faster.</p>
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a href="#pricing" class="btn-primary inline-flex items-center bg-charcoal text-cream px-10 py-4 rounded-full text-sm font-semibold">
+          <span>Start Your Free Trial</span>
+          <svg class="w-4 h-4 ml-2 relative z-10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" /></svg>
+        </a>
+        <a href="#contact" class="text-sm font-semibold text-muted hover:text-charcoal transition-colors underline underline-offset-4 decoration-warm hover:decoration-charcoal">Talk to our team →</a>
+      </div>
+      <p class="text-xs text-muted mt-6">No credit card required · 14-day free trial · Cancel anytime</p>
+    </div>
+  </section>
+
+
+  <!-- ============ FOOTER ============ -->
+  <footer id="contact" class="bg-charcoal text-cream/80 pt-16 pb-8 px-6 lg:px-8">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-10 mb-14">
+        <!-- Brand -->
+        <div class="lg:col-span-1">
+          <div class="flex items-center gap-2 mb-4">
+            <div class="w-8 h-8 bg-cream/10 rounded-lg flex items-center justify-center">
+              <svg class="w-4 h-4 text-cream" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" /></svg>
+            </div>
+            <span class="text-lg font-bold text-cream">RentFlow</span>
+          </div>
+          <p class="text-sm leading-relaxed text-cream/50">The modern rental management platform built for businesses that want to grow without the chaos.</p>
+        </div>
+
+        <!-- Product -->
+        <div>
+          <h4 class="text-sm font-semibold text-cream mb-4 uppercase tracking-wider">Product</h4>
+          <ul class="space-y-3">
+            <li><a href="#features" class="text-sm text-cream/50 hover:text-cream transition-colors">Features</a></li>
+            <li><a href="#pricing" class="text-sm text-cream/50 hover:text-cream transition-colors">Pricing</a></li>
+            <li><a href="#how-it-works" class="text-sm text-cream/50 hover:text-cream transition-colors">How it Works</a></li>
+            <li><a href="#" class="text-sm text-cream/50 hover:text-cream transition-colors">Integrations</a></li>
+          </ul>
+        </div>
+
+        <!-- Company -->
+        <div>
+          <h4 class="text-sm font-semibold text-cream mb-4 uppercase tracking-wider">Company</h4>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-sm text-cream/50 hover:text-cream transition-colors">About Us</a></li>
+            <li><a href="#" class="text-sm text-cream/50 hover:text-cream transition-colors">Blog</a></li>
+            <li><a href="#" class="text-sm text-cream/50 hover:text-cream transition-colors">Careers</a></li>
+            <li><a href="#contact" class="text-sm text-cream/50 hover:text-cream transition-colors">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Legal -->
+        <div>
+          <h4 class="text-sm font-semibold text-cream mb-4 uppercase tracking-wider">Legal</h4>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-sm text-cream/50 hover:text-cream transition-colors">Privacy Policy</a></li>
+            <li><a href="#" class="text-sm text-cream/50 hover:text-cream transition-colors">Terms of Service</a></li>
+            <li><a href="#" class="text-sm text-cream/50 hover:text-cream transition-colors">Refund Policy</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Bottom bar -->
+      <div class="border-t border-cream/10 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <p class="text-xs text-cream/40">&copy; 2026 RentFlow. All rights reserved.</p>
+        <div class="flex items-center gap-5">
+          <!-- Twitter / X -->
+          <a href="#" class="text-cream/40 hover:text-cream transition-colors" aria-label="Twitter">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" /></svg>
+          </a>
+          <!-- LinkedIn -->
+          <a href="#" class="text-cream/40 hover:text-cream transition-colors" aria-label="LinkedIn">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M20.5 2h-17A1.5 1.5 0 002 3.5v17A1.5 1.5 0 003.5 22h17a1.5 1.5 0 001.5-1.5v-17A1.5 1.5 0 0020.5 2zM8 19H5v-9h3zM6.5 8.25A1.75 1.75 0 118.3 6.5a1.78 1.78 0 01-1.8 1.75zM19 19h-3v-4.74c0-1.42-.6-1.93-1.38-1.93A1.74 1.74 0 0013 14.19a.66.66 0 000 .14V19h-3v-9h2.9v1.3a3.11 3.11 0 012.7-1.4c1.55 0 3.36.86 3.36 3.66z" /></svg>
+          </a>
+          <!-- Email -->
+          <a href="mailto:hello@rentflow.in" class="text-cream/40 hover:text-cream transition-colors" aria-label="Email">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+
+  <!-- ============ SCRIPTS ============ -->
+  <script>
+    // Mobile menu toggle
+    const menuToggle = document.getElementById('menuToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const bar1 = document.getElementById('bar1');
+    const bar2 = document.getElementById('bar2');
+    const bar3 = document.getElementById('bar3');
+    let menuOpen = false;
+
+    menuToggle.addEventListener('click', () => {
+      menuOpen = !menuOpen;
+      mobileMenu.classList.toggle('open');
+      if (menuOpen) {
+        bar1.style.transform = 'rotate(45deg) translate(3px, 3px)';
+        bar2.style.opacity = '0';
+        bar3.style.transform = 'rotate(-45deg) translate(3px, -3px)';
+      } else {
+        bar1.style.transform = '';
+        bar2.style.opacity = '1';
+        bar3.style.transform = '';
+      }
+    });
+
+    // Close mobile menu on link click
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        menuOpen = false;
+        mobileMenu.classList.remove('open');
+        bar1.style.transform = '';
+        bar2.style.opacity = '1';
+        bar3.style.transform = '';
+      });
+    });
+
+    // Intersection Observer for fade-up animations
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -50px 0px' }
+    );
+
+    document.querySelectorAll('.fade-up').forEach((el) => observer.observe(el));
+
+    // Navbar background on scroll
+    const nav = document.querySelector('nav');
+    window.addEventListener('scroll', () => {
+      if (window.scrollY > 20) {
+        nav.classList.add('shadow-sm');
+      } else {
+        nav.classList.remove('shadow-sm');
+      }
+    });
+  </script>
+
+</body>
+</html>
