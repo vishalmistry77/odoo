@@ -1,0 +1,18 @@
+:root {
+  --rf-canvas: #f4f2ee;
+  --rf-surface: #ffffff;
+  --rf-ink: #111111;
+  --rf-muted: #77736e;
+  --rf-border: #dedbd4;
+  --rf-coral: #d94841;
+  --rf-yellow: #f1b945;
+  --rf-success: #397d56;
+  --rf-danger: #c83b35;
+  --rf-radius-pill: 999px;
+  --rf-content-width: 1400px;
+  --rf-space-1: 0.5rem;
+  --rf-space-2: 1rem;
+  --rf-space-3: 1.5rem;
+  --rf-space-4: 2rem;
+  --rf-space-5: 3rem;
+}

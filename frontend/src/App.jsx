@@ -4,11 +4,7 @@ import { CartProvider } from './context/CartContext';
 import { SearchProvider } from './context/SearchContext';
 import { WishlistProvider } from './context/WishlistContext';
 import Index from './legacy-pages/Index';
-import Login from './legacy-pages/Login';
-import Signup from './legacy-pages/Signup';
-import ForgotPassword from './legacy-pages/ForgotPassword';
-import ResetPassword from './legacy-pages/ResetPassword';
-import VerifyEmail from './legacy-pages/VerifyEmail';
+import { Login, Signup, ForgotPassword, ResetPassword, VerifyEmail } from './features/auth';
 import Dashboard from './legacy-pages/Dashboard';
 import VendorDashboard from './legacy-pages/VendorDashboard';
 import AdminDashboard from './legacy-pages/AdminDashboard';
@@ -26,6 +22,7 @@ import VendorNewOrder from './legacy-pages/VendorNewOrder';
 import VendorInvoice from './legacy-pages/VendorInvoice';
 import VendorProduct from './legacy-pages/VendorProduct';
 import { lazy, Suspense } from 'react';
+import RoleShell from './components/RoleShell';
 const VendorReports = lazy(() => import('./legacy-pages/VendorReports'));
 const VendorSettings = lazy(() => import('./legacy-pages/VendorSettings'));
 const VendorProducts = lazy(() => import('./legacy-pages/VendorProducts'));
@@ -60,7 +57,7 @@ const ProtectedRoute = ({ children, requiredRole }) => {
         return <Navigate to="/dashboard" replace />;
     }
 
-    return children;
+    return <RoleShell>{children}</RoleShell>;
 };
 
 const DashboardRouter = () => {

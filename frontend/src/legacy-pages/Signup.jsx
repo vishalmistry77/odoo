@@ -139,17 +139,13 @@ const Signup = () => {
                                     className={`role-card ${formData.role === 'CUSTOMER' ? 'active' : ''}`}
                                     onClick={() => handleRoleSelect('CUSTOMER')}
                                 >
-                                    <div className="role-icon">🛒</div>
-                                    <div className="role-name">Rent Equipment</div>
-                                    <div className="role-desc">Browse and rent products</div>
+                                    <div className="role-name">Rent</div>
                                 </div>
                                 <div 
                                     className={`role-card ${formData.role === 'VENDOR' ? 'active' : ''}`}
                                     onClick={() => handleRoleSelect('VENDOR')}
                                 >
-                                    <div className="role-icon">🏪</div>
-                                    <div className="role-name">List Equipment</div>
-                                    <div className="role-desc">Become a vendor</div>
+                                    <div className="role-name">Vendor</div>
                                 </div>
                             </div>
                         </div>
@@ -328,8 +324,35 @@ const Signup = () => {
                     </p>
                 </div>
 
+                <aside className="signup-showcase" aria-label="RentFlow benefits">
+                    <div className="showcase-ribbon" />
+                    <div className="showcase-orb showcase-orb-one" />
+                    <div className="showcase-orb showcase-orb-two" />
+                    <div className="showcase-content">
+                        <span className="showcase-kicker">RENTFLOW</span>
+                        <h2>Build your rental<br />business with ease.</h2>
+                        <p>Manage equipment, customers, orders, and payments from one place.</p>
+
+                        <div className="showcase-stat-card">
+                            <span className="stat-card-label">Your rental flow</span>
+                            <strong>Everything in sync</strong>
+                            <div className="stat-bars" aria-hidden="true">
+                                <span /><span /><span /><span />
+                            </div>
+                        </div>
+
+                        <div className="showcase-note-card">
+                            <div className="note-icon">✓</div>
+                            <div>
+                                <strong>Ready when you are</strong>
+                                <span>Create an account and start renting today.</span>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
                 <div className="back-home">
-                    <Link to="/">← Back to Home</Link>
+                    <Link to="/">Back to Home</Link>
                 </div>
             </div>
         </div>
