@@ -44,7 +44,7 @@ const AdminDashboard = () => {
                 <div className="nav-container">
                     <div className="nav-left">
                         <Link to="/admin/dashboard" className="logo" style={{ textDecoration: 'none', color: 'inherit' }}>
-                            <h1>Tech Assassin <span style={{ fontSize: '0.8rem', opacity: 0.7 }}>ADMIN</span></h1>
+                            <h1>RentFlow<span className="admin-logo-dot">.</span> <small>ADMIN</small></h1>
                         </Link>
                         <div className="nav-tabs">
                             <Link to="/admin/dashboard" className="nav-tab active" style={{ textDecoration: 'none' }}>Dashboard</Link>
@@ -63,7 +63,7 @@ const AdminDashboard = () => {
                                 <div style={{ fontWeight: 600, fontSize: '0.9rem' }}>{user?.name || 'Administrator'}</div>
                                 <div style={{ fontSize: '0.75rem', color: 'var(--text-muted)' }}>System Admin</div>
                             </div>
-                            <span style={{ marginLeft: '1rem', fontSize: '1.2rem' }}>🚪</span>
+                            <span className="admin-signout">Sign out</span>
                         </div>
                     </div>
                 </div>
@@ -90,8 +90,9 @@ const AdminDashboard = () => {
                 ) : stats ? (
                     <main className="admin-main">
                         <div className="admin-header">
-                            <h2>Mission Control</h2>
-                            <p className="admin-header-subtitle">Track builders, missions, orders, and platform momentum.</p>
+                            <span className="admin-eyebrow">OVERVIEW / 01</span>
+                            <h2>Run the platform<br /><span>with clarity.</span></h2>
+                            <p className="admin-header-subtitle">A live view of revenue, orders, people, and platform health.</p>
                         </div>
 
                         <div className="admin-metrics-grid">
@@ -102,7 +103,7 @@ const AdminDashboard = () => {
                                         <div className="admin-metric-value">${stats.totalRevenue ? stats.totalRevenue.toLocaleString() : '0'}</div>
                                         <div className="admin-metric-change admin-change-positive">↑ 18.2% vs last month</div>
                                     </div>
-                                    <div className="admin-metric-icon">💰</div>
+                                    <div className="admin-metric-icon">01</div>
                                 </div>
                             </div>
 
@@ -113,7 +114,7 @@ const AdminDashboard = () => {
                                         <div className="admin-metric-value">{stats.activeRentals}</div>
                                         <div className="admin-metric-change admin-change-positive">↑ 12.5% vs last month</div>
                                     </div>
-                                    <div className="admin-metric-icon">📦</div>
+                                    <div className="admin-metric-icon">02</div>
                                 </div>
                             </div>
 
@@ -124,7 +125,7 @@ const AdminDashboard = () => {
                                         <div className="admin-metric-value">{stats.totalUsers}</div>
                                         <div className="admin-metric-change admin-change-positive">↑ {stats.totalUsers} new this month</div>
                                     </div>
-                                    <div className="admin-metric-icon">👥</div>
+                                    <div className="admin-metric-icon">03</div>
                                 </div>
                             </div>
 
@@ -135,7 +136,7 @@ const AdminDashboard = () => {
                                         <div className="admin-metric-value">${(stats.totalRevenue * 0.1).toLocaleString()}</div>
                                         <div className="admin-metric-change admin-change-positive">↑ 15.3% vs last month</div>
                                     </div>
-                                    <div className="admin-metric-icon">💳</div>
+                                    <div className="admin-metric-icon">04</div>
                                 </div>
                             </div>
                         </div>
@@ -172,14 +173,21 @@ const AdminDashboard = () => {
                                         ))}
                                     </div>
                                 </div>
-                                <div className="admin-chart-placeholder">📊 Revenue Chart (Would use Chart.js or similar)</div>
+                                <div className="admin-chart-placeholder admin-revenue-visual" aria-label="Revenue trend visual">
+                                    <span style={{ height: '34%' }} /><span style={{ height: '52%' }} /><span style={{ height: '43%' }} />
+                                    <span style={{ height: '71%' }} /><span style={{ height: '62%' }} /><span style={{ height: '88%' }} />
+                                    <span style={{ height: '76%' }} /><span style={{ height: '100%' }} />
+                                </div>
                             </div>
 
                             <div className="admin-chart-card">
                                 <div className="admin-chart-header">
                                     <h3 className="admin-chart-title">Builder Distribution</h3>
                                 </div>
-                                <div className="admin-chart-placeholder">🥧 Pie Chart</div>
+                                <div className="admin-chart-placeholder admin-distribution-visual">
+                                    <div className="distribution-ring"><span>{stats.totalUsers}</span></div>
+                                    <p>Registered builders</p>
+                                </div>
                             </div>
                         </div>
 
@@ -192,7 +200,7 @@ const AdminDashboard = () => {
                                         <div className="admin-vendor-rank">{index + 1}</div>
                                         <div className="admin-vendor-info">
                                             <div className="admin-vendor-name">{v.name}</div>
-                                            <div className="admin-vendor-stats">{v.products} products • {v.rentals} active rentals</div>
+                                            <div className="admin-vendor-stats">{v.products} products / {v.rentals} active rentals</div>
                                         </div>
                                         <div className="admin-vendor-revenue">${v.revenue.toLocaleString()}</div>
                                     </div>
@@ -209,7 +217,7 @@ const AdminDashboard = () => {
                                 stats.activity.map((a, i) => (
                                     <div key={i} className="admin-activity-item">
                                         <div className="admin-activity-icon">
-                                            {a.type === 'USER' ? '👤' : a.type === 'PRODUCT' ? '📦' : '💰'}
+                                            {a.type === 'USER' ? 'U' : a.type === 'PRODUCT' ? 'P' : 'R'}
                                         </div>
                                         <div className="admin-activity-content">
                                             <div className="admin-activity-title">{a.title}</div>

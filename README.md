@@ -1,6 +1,6 @@
 #  RentFlow - Rental Management System
 
-A comprehensive full-stack rental management platform built with **React**, **Node.js**, **Express**, and **PostgreSQL**. RentFlow enables vendors to manage rental products, customers to browse and rent items, and admins to oversee the entire platform.
+A comprehensive full-stack rental management platform built with **Next.js**, **Node.js**, **Express**, and **PostgreSQL**. RentFlow enables vendors to manage rental products, customers to browse and rent items, and admins to oversee the entire platform.
 
 ---
 
