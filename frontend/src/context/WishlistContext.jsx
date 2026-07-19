@@ -5,10 +5,15 @@ const WishlistContext = createContext();
 export const useWishlist = () => useContext(WishlistContext);
 
 export const WishlistProvider = ({ children }) => {
-    const [wishlist, setWishlist] = useState(() => {
+    const [wishlist, setWishlist] = useState([]);
+
+    // Hydrate from localStorage on client mount
+    useEffect(() => {
         const saved = localStorage.getItem('wishlist');
-        return saved ? JSON.parse(saved) : [];
-    });
+        if (saved) {
+            setWishlist(JSON.parse(saved));
+        }
+    }, []);
 
     useEffect(() => {
         localStorage.setItem('wishlist', JSON.stringify(wishlist));

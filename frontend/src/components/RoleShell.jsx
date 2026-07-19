@@ -13,7 +13,7 @@ const navigation = {
         ['Reports', '/vendor/reports'], ['Settings', '/vendor/settings'],
     ],
     CUSTOMER: [
-        ['Browse', '/dashboard'], ['My Orders', '/customer/orders'], ['Cart', '/cart'], ['Settings', '/customer/settings'],
+        ['Dashboard', '/customer/dashboard'], ['Browse', '/dashboard'], ['My Orders', '/customer/orders'], ['Cart', '/cart'], ['Settings', '/customer/settings'],
     ],
 };
 

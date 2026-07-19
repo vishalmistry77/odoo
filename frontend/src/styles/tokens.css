@@ -1,13 +1,16 @@
 :root {
-  --rf-canvas: #f4f2ee;
-  --rf-surface: #ffffff;
-  --rf-ink: #111111;
-  --rf-muted: #77736e;
-  --rf-border: #dedbd4;
-  --rf-coral: #d94841;
-  --rf-yellow: #f1b945;
-  --rf-success: #397d56;
-  --rf-danger: #c83b35;
+  --rf-canvas: #08111f;
+  --rf-surface: #101c2f;
+  --rf-surface-raised: #16243a;
+  --rf-ink: #f8fafc;
+  --rf-muted: #a9b7cc;
+  --rf-border: #2a3b55;
+  --rf-cyan: #38bdf8;
+  --rf-amber: #f59e0b;
+  --rf-success: #34d399;
+  --rf-danger: #fb7185;
+  --rf-coral: var(--rf-cyan);
+  --rf-yellow: var(--rf-amber);
   --rf-radius-pill: 999px;
   --rf-content-width: 1400px;
   --rf-space-1: 0.5rem;
